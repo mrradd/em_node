@@ -1,11 +1,14 @@
 import OpenAI from 'openai';
 import express, { Express, Request, Response } from "express";
 import DotenvFlow from "dotenv-flow";
+const cors = require('cors');
 
 DotenvFlow.config();
 const app = express();
 const port = process.env.PORT || 3000;
 const client = new OpenAI({apiKey: process.env.OPEN_AI_KEY || ""});
+
+app.use(cors());
 
 app.get('/test_chat', async (req, res) => {
   const completion = await client.chat.completions.create({
@@ -22,6 +25,7 @@ app.get('/test_chat', async (req, res) => {
 });
 
 app.get('/yay', (req, res) => {
+  console.log("$$$ yay hit");
   res.status(200).json({herp: "derp"});
 });
 
