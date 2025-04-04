@@ -1,6 +1,7 @@
 import OpenAI from 'openai';
 import express, { Express, Request, Response } from "express";
 import DotenvFlow from "dotenv-flow";
+import path from 'path';
 const cors = require('cors');
 
 DotenvFlow.config();
@@ -9,6 +10,10 @@ const port = process.env.PORT || 3000;
 const client = new OpenAI({apiKey: process.env.OPEN_AI_KEY || ""});
 
 app.use(cors());
+console.log(`dirname: ${__dirname}`);
+
+app.use('/', express.static(path.join(__dirname, '../public')))
+app.use('/pages', express.static(path.join(__dirname, '../public/pages')))
 
 app.get('/test_chat', async (req, res) => {
   const completion = await client.chat.completions.create({

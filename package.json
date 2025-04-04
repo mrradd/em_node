@@ -2,7 +2,7 @@
   "name": "em_node",
   "version": "0.1.0",
   "description": "Node project using openai.",
-  "main": "dist/app.js",
+  "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
     "dev": "nodemon src/server.ts",
