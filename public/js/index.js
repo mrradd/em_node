@@ -1,38 +1,59 @@
 /*************************************************************************************************/
-const rad_indexMain = () => {
+/**
+ * Main code for the index page.
+ * @returns object of things to use.
+ */
+const RadIndexMain = () => {
   console.log("index_main");
 
-  const rad_generateButton = ({id, label, onclickFn}) => {
-    return `<button id=${id} >${label}</button>`;
+  const renderMainContent = () => {
+    const mainContentNode = document.getElementById("main_content");
+    const textArea = rad_lib.radCreateElement({
+      htmlTagName: "textarea",
+      elementId: "user_request_text",
+    });
+
+    mainContentNode.appendChild(textArea);
+    console.log(textArea);
+    textArea.autofocus = true;  
   };
 
-  const derp = () => {
-    console.log("flerp");
-  };
-  
-  const flim = () => {
-    alert("flam");
+  const renderPageTop = () => {
+    const pageTopNode = document.getElementById("page_top");
+    const nav = rad_lib.radCreateElement({
+      htmlTagName: "div",
+      elementId: "top_nav"
+    });
+
+    const mainPageBtn = rad_lib.radCreateButton({
+      id: "main_page_btn",
+      label: "Main Page",
+      //TODO CH  TESTING.
+      onclickFn: () => {
+        const btn = rad_lib.radCreateButton({
+          label:"derp",
+          onclickFn: () => {alert("herp");}
+        });
+        nav.appendChild(btn);
+      }
+    });
+
+    nav.appendChild(mainPageBtn);
+    pageTopNode.appendChild(nav);
   };
 
-  const rad_pageSetup = () => {
-    const pageTopNode = document.getElementById("page_top").innerHTML = rad_generateButton(
-      {
-        id: "btn1",
-        label: "Cool Button",
-        onCickFn: "derp"
-      });
+  const render = () => {
+    renderPageTop();
+    renderMainContent();
 
-    console.log(document.getElementById("btn1"))
-    document.getElementById("btn1").addEventListener("click", derp);
   };
 
-  rad_pageSetup();
-
-  //I can do an exports type thing like this then use the properties later. Interesting.
-  return {
-    flim: flim,
+  const exportObject = {
+    render: render,
   };
+  return exportObject;
 }
 
 /*************************************************************************************************/
-const x = rad_indexMain();
+const rad_index = RadIndexMain();
+rad_index.render();
