@@ -1,0 +1,13 @@
+# TODOS (not in any order)
+- [x] Text input from user.
+- [x] Save state temporarily in an object.
+- [ ] Be able to display and update multiple elements independently.
+- [ ] Save state in IndexedDB.
+- [ ] Send llm request from user text input.
+- [ ] Implement response API.
+- [ ] Save llm request to local storage.
+- [ ] Display a single chat on screen.
+- [ ] Save multiple llm chats to local storage.
+- [ ] Able to select an llm chat to view.
+- [ ] Styling to look at least presentable.
+- [ ] Validation. 
