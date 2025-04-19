@@ -28,9 +28,10 @@ const RadLib = () => {
    * @param htmlTagName `string` - Name of the HTML element tag to generate.
    * @param elementId `string` - ID for the button.
    * @param classNames `string[]` - Array of CSS class names. Defaults to [].
+   * @param styles `Object[]` - Array of CSS styling rule objects. Defaults to [].
    * @returns HTML button element.
    */
-  const radCreateElement = ({htmlTagName, elementId, classNames = []}) => {
+  const radCreateElement = ({htmlTagName, elementId, classNames = [], styles = []}) => {
     const element = document.createElement(htmlTagName);
 
     if(elementId && elementId.length > 0) {
@@ -39,6 +40,10 @@ const RadLib = () => {
     
     if(classNames.length > 0) {
       element.classList = [...classNames];
+    }
+
+    if(styles.length > 0) {
+      Object.assign(element.style, ...styles);
     }
 
     return element

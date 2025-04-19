@@ -19,7 +19,7 @@ const RadIndexMain = () => {
     
     const title = rad_lib.radCreateElement({
       htmlTagName: "h1",
-      classNames: ["app_title"]
+      classNames: ["app_title"],
     });
     title.innerText = "The Electric Meatball"
 
@@ -32,31 +32,33 @@ const RadIndexMain = () => {
     /** START middle main content. **/
     const middleContent = rad_lib.radCreateElement({
       htmlTagName: "div",
-      elementId: "middle_main_content"
+      elementId: "middle_main_content",
+      styles: [style_CenterFlex],
     });
-    Object.assign(middleContent.style, style_CenterFlex);
     /** END middle main content. **/
 
     /** START lower main content. **/
     const lowerContent = rad_lib.radCreateElement({
       htmlTagName: "div",
-      elementId: "lower_main_content"
+      elementId: "lower_main_content",
+      styles: [style_CenterFlex]
     });
-    Object.assign(lowerContent.style, style_CenterFlex);
     
     const textArea = rad_lib.radCreateElement({
       htmlTagName: "textarea",
       elementId: "user_request_text",
+      styles: [style_RequestTextarea]
     });
-    Object.assign(textArea.style, style_RequestTextarea);
+    textArea.addEventListener("change", (e) => {
+    });
 
     const submitButton = rad_lib.radCreateButton({
-      label: "Submit",
-      elementId: "submit_button",
-      onclickFn: () => {
-        state.requestText = textArea.value;
-        console.log(state.requestText);
-        middleContent.innerText = state.requestText;
+      label: "Submit Request",
+      elementId: "submit_request_button",
+      onclickFn: async () => {
+        const chatResponse = await rad_server_api.chat(textArea.value);
+        console.log(`${JSON.stringify(chatResponse)}`);
+        middleContent.innerText = chatResponse.response;
       }
     });
 
