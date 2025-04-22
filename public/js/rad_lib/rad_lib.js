@@ -9,13 +9,20 @@ const RadLib = () => {
    * @param label `string` - Label for the button.
    * @param onclickFn `function` - Function to call when clicked.
    * @param classNames `string[]` - Array of CSS class names. Defaults to [].
+   * @param styles `Object[]` - Array of css style objects.
    * @returns HTML button element.
+   * @throws
    */
-  const radCreateButton = ({elementId = "", label, onclickFn, classNames = []}) => {
+  const radCreateButton = ({elementId = "", label, onclickFn, classNames = [], styles = []}) => {
+    if(!onclickFn) {
+      throw new Error("onclickFn must be defined.");
+    }
+
     const button = radCreateElement({
       htmlTagName: "button",
       elementId: elementId,
       classNames: [...classNames, CSS_CLASSES.rad_button],
+      styles,
     });
 
     button.onclick = onclickFn;
@@ -29,21 +36,30 @@ const RadLib = () => {
    * @param elementId `string` - ID for the button.
    * @param classNames `string[]` - Array of CSS class names. Defaults to [].
    * @param styles `Object[]` - Array of CSS styling rule objects. Defaults to [].
-   * @returns HTML button element.
+   * @param innerText `string` - String that displays inside the element.
+   * @returns HTML element of the type defined by htmlTagName.
+   * @throws
    */
-  const radCreateElement = ({htmlTagName, elementId, classNames = [], styles = []}) => {
+  const radCreateElement = ({htmlTagName, elementId = "", classNames = [], styles = [], innerText = ""}) => {
+    if(!htmlTagName) {
+      throw new Error("htmlTagName must be provided.");
+    }
     const element = document.createElement(htmlTagName);
 
-    if(elementId && elementId.length > 0) {
+    if(elementId?.length > 0) {
       element.id = elementId;
     }
     
-    if(classNames.length > 0) {
+    if(classNames?.length > 0) {
       element.classList = [...classNames];
     }
 
-    if(styles.length > 0) {
+    if(styles?.length > 0) {
       Object.assign(element.style, ...styles);
+    }
+
+    if(innerText?.length > 0) {
+      element.innerText = innerText;
     }
 
     return element
