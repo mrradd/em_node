@@ -10,7 +10,8 @@ const test_state = {
     "Nam magna nibh, malesuada eu blandit id, eleifend sed arcu.",
     "Donec finibus auctor nibh at semper. Donec efficitur, nisi feugiat efficitur ornare, quam urna ultricies nisl, ut lobortis tortor ex a orci. Vivamus consectetur tincidunt erat, eu condimentum odio tristique quis. Curabitur non porta est, ac tristique nulla. Pellentesque vel odio nec ante ultrices fringilla. Duis ex ante, scelerisque quis ultrices sit amet, venenatis sit amet urna. Vivamus nec aliquam orci. Suspendisse potenti. Donec sodales sed ante at venenatis. Fusce mollis lacus ut rutrum rutrum. Donec at molestie urna. Curabitur et semper lacus. Phasellus quis orci rhoncus, ullamcorper metus ac, placerat justo.",
     "Yes, elephants can paint. There are several elephants, particularly in places like Thailand and other parts of Asia, that have been trained to paint using brushes and canvases. These elephants are often part of art programs where they learn to create simple artworks. The painting activity is typically gentle and allows the elephants to express themselves in a unique way. However, it's essential to consider the ethical implications of such training and ensure that the elephants are treated humanely and that their welfare is prioritized.",
-    "The most famous elephant known for painting is probably **Happy the Elephant**. Happy gained popularity due to her ability to create artwork using a paintbrush held in her trunk. She is often associated with art demonstrations and exhibitions, showcasing her unique talent. However, there are other elephants, like **Sammy** and **Nandi**, that have also captured public attention through their painting abilities. These elephants have been featured in various media, highlighting their artistic skills."
+    "The most famous elephant known for painting is probably **Happy the Elephant**. Happy gained popularity due to her ability to create artwork using a paintbrush held in her trunk. She is often associated with art demonstrations and exhibitions, showcasing her unique talent. However, there are other elephants, like **Sammy** and **Nandi**, that have also captured public attention through their painting abilities. These elephants have been featured in various media, highlighting their artistic skills.",
+    "# Sample Markdown Title using ```markedjs```.",
   ],
 };
 
@@ -106,12 +107,11 @@ const RadIndexMain = () => {
 
   const renderResponseSection = (chatResponseStr, key) => {
     const responseSection = rad_lib.radCreateElement({
-      htmlTagName: "div",
+      htmlTagName: "p",
       elementId: `response_section_${key}`,
-      innerText: chatResponseStr,
       styles: [style_MarginNormal, style_ResponseSection]
     });
-
+    responseSection.innerHTML = marked.parse(chatResponseStr)
     return responseSection;
   };
 
