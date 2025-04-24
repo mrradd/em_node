@@ -2,6 +2,9 @@ const RadLib = () => {
   const CSS_CLASSES = {
     rad_button: "rad_button",
   };
+  const RAD_ELEMENT_IDS = {
+    rad_throbber: "rad_throbber",
+  };
 
   /**
    * Creates an HTML button element with the passed in values.
@@ -79,11 +82,35 @@ const RadLib = () => {
     window.open(url, "_blank");
   };
 
+  /**
+   * Removes the Rad Throbber.
+   */
+  const radThrobberRemove = () => {
+    const throbber = document.getElementById(RAD_ELEMENT_IDS.rad_throbber);
+    throbber.remove();
+  };
+
+  /**
+   * Appends the Rad Throbber to the passed in element.
+   * @param parentElement `HTMLElement` - The HTML Element to append the throbber to.
+   */
+  const radThrobberShow = ({parentElement}) => {
+    //TODO CH  TURN INTO AN ACTUAL THROBBER.
+    const throbber = rad_lib.radCreateElement({
+      htmlTagName: "div",
+      elementId: RAD_ELEMENT_IDS.rad_throbber,
+      innerText: "...THINKING...",
+    });
+    parentElement.appendChild(throbber);
+  };
+
   /** All the exposed public properties. */
   const exportObject = {
     radCreateButton: radCreateButton,
     radCreateElement: radCreateElement,
     radOpenNewTabAt: radOpenNewTabAt,
+    radThrobberRemove: radThrobberRemove,
+    radThrobberShow: radThrobberShow,
   };
   return exportObject;
 };

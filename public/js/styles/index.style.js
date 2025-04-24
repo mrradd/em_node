@@ -22,7 +22,8 @@ const style_ResponseSection = {
 };
 
 const style_ResponsesSection = {
-  "max-height": "50vh",
+  "min-height": "60vh",
+  "max-height": "60vh",
   overflow: "auto"
 };
 

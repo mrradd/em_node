@@ -1,20 +1,35 @@
 # TODOS (not in any order)
 - [x] Text input from user.
 - [x] Save state temporarily in an object.
+- [x] Implement chat object that saves the date, prompt, and response of the request.
 - [x] Be able to display and update multiple chat log elements independently.
   - [x] Separate the sections visibly.
-  - [ ] Display the prompts and then responses like a text message chain.
-  - [ ] Load previous state of responses at page load.
-  - [ ] Show datetime of the request and response.
-- [ ] Request text area sticks to the bottom of the screen.
-- [ ] Responses in scrollable view above the request text area.
+  - [x] Display the prompts and then responses like a text message chain.
+  - [x] Load previous state of responses at page load.
+  - [x] Show datetime of the request and response.
+- [x] Request text area sticks to the bottom of the screen.
+- [x] Responses in scrollable view above the request text area.
 - [ ] Create SQLite DB accessed through server to save data.
   - [ ] Save chat responses to db.
   - [ ] Save separate chat threads.
   - [ ] Save chat metrics to db.
-- [ ] Show throbber when waiting for api response.
+- [ ] Allow for separate chats.
+  - [ ] Show all chats in a list.
+  - [ ] Select and load a specific chat thread.
+  - [ ] Delete a chat thread.
+- [x] Signify loading when waiting for api response.
 - [x] Make a fetch request.
 - [x] Send llm request from user text input.
 - [ ] Implement response API.
 - [x] Display a single chat on screen.
 - [ ] Validation.
+- [ ] Export human readable file of a single chat thread.
+- [ ] Export human readable file of all chat threads.
+- [ ] Export JSON of a single chat thread.
+- [ ] Export JSON of all chat threads.
+- [ ] Prettify
+  - [ ] Border around the response list area.
+  - [ ] Stop the screen jumping when showing loading indicator.
+  - [ ] Show actual throbber.
+  - [ ] Use a color theme rather than just white.
+  - [ ] Style the buttons.
