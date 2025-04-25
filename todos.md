@@ -9,7 +9,7 @@
   - [x] Show datetime of the request and response.
 - [x] Request text area sticks to the bottom of the screen.
 - [x] Responses in scrollable view above the request text area.
-- [ ] Create SQLite DB accessed through server to save data.
+- [-] Create SQLite DB accessed through server to save data.
   - [ ] Save chat responses to db.
   - [ ] Save separate chat threads.
   - [ ] Save chat metrics to db.
@@ -23,10 +23,11 @@
 - [ ] Implement response API.
 - [x] Display a single chat on screen.
 - [ ] Validation.
-- [ ] Export human readable file of a single chat thread.
-- [ ] Export human readable file of all chat threads.
-- [ ] Export JSON of a single chat thread.
-- [ ] Export JSON of all chat threads.
+- [ ] Exports
+  - [ ] Human readable file of a single chat thread.
+  - [ ] Human readable file of all chat threads.
+  - [ ] JSON of a single chat thread.
+  - [ ] JSON of all chat threads.
 - [ ] Prettify
   - [ ] Border around the response list area.
   - [ ] Stop the screen jumping when showing loading indicator.
