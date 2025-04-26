@@ -33,3 +33,4 @@
   - [ ] Show actual throbber.
   - [ ] Use a color theme rather than just white.
   - [ ] Style the buttons.
+- [ ] Button to copy a raw response section md text to the clipboard.
