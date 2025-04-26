@@ -1,0 +1,9 @@
+body {
+  background-color: rgb(33, 33, 33);
+  color: rgb(243,243,243);
+}
+
+.response_section {
+  background-color: rgb(48, 48, 48);
+  border-radius: 15px;
+}

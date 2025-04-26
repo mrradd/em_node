@@ -13,6 +13,7 @@
   - [x] Save chat responses to db.
   - [ ] Save separate chat threads.
   - [x] Save chat metrics to db.
+  - [ ] Load previous chats.
 - [ ] Allow for separate chats.
   - [ ] Show all chats in a list.
   - [ ] Select and load a specific chat thread.
@@ -29,9 +30,9 @@
   - [ ] JSON of a single chat thread.
   - [ ] JSON of all chat threads.
 - [ ] Prettify
-  - [ ] Border around the response list area.
   - [ ] Stop the screen jumping when showing loading indicator.
-  - [ ] Show actual throbber.
-  - [ ] Use a color theme rather than just white.
+  - [ ] Show actual throbber instead of text.
+  - [x] Use a color theme rather than just white.
   - [ ] Style the buttons.
+  - [ ] Replace inline css with stylesheets where appropriate.
 - [ ] Button to copy a raw response section md text to the clipboard.

@@ -130,6 +130,7 @@ const RadIndexMain = () => {
     const responseSection = rad_lib.radCreateElement({
       htmlTagName: "p",
       elementId: `response_section_${key}`,
+      classNames: ["response_section"],
       styles: [style_MarginNormal, style_ResponseSection]
     });
     responseSection.innerHTML = marked.parse(chatResponseStr)
