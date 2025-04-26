@@ -1,6 +1,8 @@
 import { Router } from "express";
 import OpenAI from 'openai';
 import DotenvFlow from "dotenv-flow";
+import { ChatDataModel } from "../db/models.js";
+import { saveChatData } from "../db/db.js";
 
 DotenvFlow.config();
 
@@ -17,7 +19,20 @@ chatGptRouter.post('/chat', async (req, res) => {
       },
     ],
   });
+
   const resp = completion.choices[0].message.content;
+
+  const chatData = new ChatDataModel();
+  chatData.chat_id = completion.id;
+  chatData.prompt = req.body.requestText;
+  chatData.response = completion.choices[0].message.content;
+  chatData.prompt_tokens = completion.usage?.prompt_tokens || 0;
+  chatData.completion_tokens = completion.usage?.completion_tokens || 0;
+  chatData.reasoning_tokens = completion.usage?.completion_tokens_details?.reasoning_tokens || 0;
+  chatData.response_id = "n/a";
+
+  saveChatData(chatData);
+
   res.status(200).json({response: resp});
 });
 

@@ -9,10 +9,10 @@
   - [x] Show datetime of the request and response.
 - [x] Request text area sticks to the bottom of the screen.
 - [x] Responses in scrollable view above the request text area.
-- [-] Create SQLite DB accessed through server to save data.
-  - [ ] Save chat responses to db.
+- [x] Create SQLite DB accessed through server to save data.
+  - [x] Save chat responses to db.
   - [ ] Save separate chat threads.
-  - [ ] Save chat metrics to db.
+  - [x] Save chat metrics to db.
 - [ ] Allow for separate chats.
   - [ ] Show all chats in a list.
   - [ ] Select and load a specific chat thread.
