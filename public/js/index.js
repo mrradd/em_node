@@ -11,11 +11,12 @@ const RadIndexMain = () => {
     const pageBottomNode = document.getElementById("page_bottom");
     
     const poweredBy = rad_lib.radCreateElement({
-      htmlTagName: "h5",
+      htmlTagName: "a",
       elementId: "powered_by",
       innerText: "Powered by The Senator",
     });
     pageBottomNode.appendChild(poweredBy);
+    poweredBy.setAttribute("href", "https://thesenator.dev");
   };
 
   /**
