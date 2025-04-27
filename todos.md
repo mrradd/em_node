@@ -11,11 +11,11 @@
 - [x] Responses in scrollable view above the request text area.
 - [x] Create SQLite DB accessed through server to save data.
   - [x] Save chat responses to db.
-  - [ ] Save separate chat threads.
   - [x] Save chat metrics to db.
-  - [ ] Load previous chats.
-- [ ] Allow for separate chats.
-  - [ ] Show all chats in a list.
+  - [x] Load previous chats.
+- [ ] Delete single chat.
+- [ ] Allow for separate chats threads.
+  - [ ] Show all chat threads in a list.
   - [ ] Select and load a specific chat thread.
   - [ ] Delete a chat thread.
 - [x] Signify loading when waiting for api response.
