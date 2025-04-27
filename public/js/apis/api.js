@@ -1,11 +1,11 @@
-const RadServerApi = () => {
-  const baseServerUrl = "http://localhost:3042"
+const baseServerUrl = "http://localhost:3042";
 
+class RadServerApi {
   /**
    * Makes a request to the server API to see if it is running.
    * @returns fetch response object.
    */
-  const chat = async (requestText) => {
+  static async chat (requestText) {
     try {
       const response = await fetch(`${baseServerUrl}/api/llm/chat`, {
         method: "post",
@@ -23,14 +23,31 @@ const RadServerApi = () => {
     }
     catch (error) {
       console.log(`ERROR ServerApi::chat ${error.message}`);
+      return null;
     }
-  };
+  }
+
+  static async getAllMessages (){
+    try {
+      const response = await fetch(`${baseServerUrl}/api/llm/all`, {method: "get",});
+
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+
+      return await response.json();
+    }
+    catch (error) {
+      console.log(`ERROR ServerApi::getAllChats ${error.message}`);
+      return null;
+    }
+  }
 
   /**
    * Makes a request to the server API to see if it is running.
    * @returns fetch response object.
    */
-  const heartbeat = async () => {
+  static async heartbeat(){
     try {
       const response = await fetch(`${baseServerUrl}/heartbeat`);
       if(!response.ok) {
@@ -42,34 +59,7 @@ const RadServerApi = () => {
     }
     catch (error) {
       console.log(`ERROR ServerApi::heartbeat ${error.message}`);
+      return null;
     }
-  };
-
-  /**
-   * Makes a request to the server API to receive a predefined test chat result.
-   * @returns fetch response object.
-   */
-  const testChat = async () => {
-    try {
-      const response = await fetch(`${baseServerUrl}/test_chat`);
-      if(!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-
-      console.log(`$$$ ${JSON.stringify(await response.json())}`);
-      return response;
-    }
-    catch (error) {
-      console.log(`ERROR ServerApi::testChat ${error.message}`);
-    }
-  };
-
-  const exportObject = {
-    chat: chat,
-    heartbeat: heartbeat,
-    testChat: testChat,
-  };
-  return exportObject;
+  }
 };
-
-const rad_server_api = RadServerApi();

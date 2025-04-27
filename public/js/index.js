@@ -14,6 +14,7 @@ const RadIndexMain = () => {
       htmlTagName: "a",
       elementId: "powered_by",
       innerText: "Powered by The Senator",
+      classNames: ["powered_by",],
     });
     pageBottomNode.appendChild(poweredBy);
     poweredBy.setAttribute("href", "https://thesenator.dev");
@@ -46,8 +47,8 @@ const RadIndexMain = () => {
       styles: [style_ResponsesSection]
     });
     
-    radEMState.chatResponses.forEach((responseStr, index, array) => {
-      const responseElement = renderResponseSection(responseStr, index);
+    radEMState.chatResponses.forEach((chat, index, array) => {
+      const responseElement = renderResponseSection(chat.response, index);
       responsesSection.appendChild(responseElement);
     });
 
@@ -76,7 +77,7 @@ const RadIndexMain = () => {
         rad_lib.radThrobberShow({
           parentElement: middleContent
         });
-        const chatResponse = await rad_server_api.chat(resquestTextArea.value);
+        const chatResponse = await RadServerApi.chat(resquestTextArea.value);
         rad_lib.radThrobberRemove();
 
         const date = new Date();
@@ -84,7 +85,7 @@ const RadIndexMain = () => {
           localeDateStr: date.toLocaleDateString(),
           localeTimeStr: date.toLocaleTimeString(),
           prompt: resquestTextArea.value,
-          response: chatResponse.response,
+          response: chatResponse.data,
         });
         radEMState.chatResponses.push(responseObj);
 
@@ -127,7 +128,7 @@ const RadIndexMain = () => {
    * @param key `string` - Unique identifier that is appended to the ID of the element.
    * @returns 
    */
-  const renderResponseSection = ({chatResponseStr, key}) => {
+  const renderResponseSection = (chatResponseStr, key) => {
     const responseSection = rad_lib.radCreateElement({
       htmlTagName: "p",
       elementId: `response_section_${key}`,
@@ -138,12 +139,12 @@ const RadIndexMain = () => {
     return responseSection;
   };
 
-  //Public
   /**
    * 
    */
-  const render = () => {
-    radEMState.chatResponses = Object.assign(radEMState.chatResponses, test_state.chatResponses);
+  const render = async () => {
+    const chats = await RadServerApi.getAllMessages();
+    radEMState.chatResponses = [...chats.data];
     renderMainContainer();
     renderPageTop();
     renderMainContent();
@@ -157,7 +158,7 @@ const RadIndexMain = () => {
 }
 
 /*************************************************************************************************/
-window.onload = () => {
+window.onload = async () => {
   const rad_index = RadIndexMain();
-  rad_index.render();
+  await rad_index.render();
 }

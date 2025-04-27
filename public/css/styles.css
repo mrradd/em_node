@@ -7,3 +7,7 @@ body {
   background-color: rgb(48, 48, 48);
   border-radius: 15px;
 }
+
+.powered_by {
+  color: red;
+}

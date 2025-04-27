@@ -4,7 +4,7 @@ export const initDb = () => {
   try {
     console.log("Initializing the DB...");
     TheDB.exec("BEGIN");
-    TheDB.exec(`CREATE TABLE chat_data(
+    TheDB.exec(`CREATE TABLE IF NOT EXISTS chat_data(
       id TEXT PRIMARY KEY,
       response_id TEXT,
       chat_id TEXT,
