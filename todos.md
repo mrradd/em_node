@@ -40,3 +40,5 @@
   - [ ] Add the different models to the database.
   - [ ] Load the different models into a list in the UI.
 - [x] Implement PM2 support.
+- [ ] Clean up duped code.
+- [ ] Clean up tech debt.

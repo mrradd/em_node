@@ -48,7 +48,16 @@ const RadIndexMain = () => {
     });
     
     radEMState.chatResponses.forEach((chat, index, array) => {
-      const responseElement = renderResponseSection(chat.response, index);
+      const responseObj = new ChatResponse({
+        dateStr: chat.date,
+        prompt: chat.prompt,
+        response: chat.response,
+      });
+      radEMState.chatResponses.push(responseObj);
+
+      const responseText = EMUtils.compilePromptAnswerText(responseObj);
+
+      const responseElement = renderResponseSection(responseText, index);
       responsesSection.appendChild(responseElement);
     });
 
@@ -80,20 +89,23 @@ const RadIndexMain = () => {
         const chatResponse = await RadServerApi.chat(resquestTextArea.value);
         rad_lib.radThrobberRemove();
 
-        const date = new Date();
-        const responseObj = new RadChatResponseCtor({
-          localeDateStr: date.toLocaleDateString(),
-          localeTimeStr: date.toLocaleTimeString(),
-          prompt: resquestTextArea.value,
-          response: chatResponse.data,
+        if(!chatResponse) {
+          alert("ERROR: submitButton: No chat response.");
+          return;
+        }
+
+        const responseObj = new ChatResponse({
+          dateStr: chatResponse.date,
+          prompt: chatResponse.prompt,
+          response: chatResponse.response,
         });
         radEMState.chatResponses.push(responseObj);
 
-        const responseText = em_utils.em_compilePromptAnswerText(responseObj);
-        const responseSection = renderResponseSection({
-          chatResponseStr: responseText,
-          key: radEMState.chatResponses.length - 1
-        });
+        const responseText = EMUtils.compilePromptAnswerText(responseObj);
+        const responseSection = renderResponseSection(
+          responseText,
+          radEMState.chatResponses.length - 1,
+        );
         responsesSection.appendChild(responseSection);
       },
     });

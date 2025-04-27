@@ -1,5 +1,6 @@
 import sqlite from "node:sqlite";
 import crypto from "crypto";
+import { ChatDataModel } from "./models.js";
 
 export const TheDB = new sqlite.DatabaseSync("electric_meatball.db");
 
@@ -33,28 +34,42 @@ export class ChatDataService {
       VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`);
 
       const date = new Date();
+      let newChatObj = new ChatDataModel();
+      newChatObj = {
+        id: crypto.randomUUID(),
+        response_id: response_id,
+        chat_id: chat_id,
+        prompt: prompt,
+        response: response,
+        prompt_char_count: prompt.length,
+        response_char_count: response.length,
+        prompt_tokens: prompt_tokens,
+        completion_tokens: completion_tokens,
+        reasoning_tokens: reasoning_tokens,
+        date: `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`,
+      };
 
       insertChatData.run(
-        crypto.randomUUID(),
-        response_id,
-        chat_id,
-        prompt,
-        response,
-        prompt.length,
-        response.length,
-        prompt_tokens,
-        completion_tokens,
-        reasoning_tokens,
-        `${date.toISOString()}`,
+        newChatObj.id,
+        newChatObj.response_id,
+        newChatObj.chat_id,
+        newChatObj.prompt,
+        newChatObj.response,
+        newChatObj.prompt_char_count,
+        newChatObj.response_char_count,
+        newChatObj.prompt_tokens,
+        newChatObj.completion_tokens,
+        newChatObj.reasoning_tokens,
+        newChatObj.date,
       );
 
       TheDB.exec("COMMIT;");
-      return true;
+      return newChatObj;
     }
     catch (error) {
       TheDB.exec("ROLLBACK;");
       console.log(`ERROR: saveChatData: ${error.message}`);
-      return false;
+      return null;
     }
   }
 }

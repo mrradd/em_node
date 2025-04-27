@@ -34,8 +34,6 @@ chatGptRouter.post('/chat', async (req, res) => {
       ],
     });
 
-    const resp = completion.choices[0].message.content;
-
     const chatData = new ChatDataModel();
     chatData.chat_id = completion.id;
     chatData.prompt = req.body.requestText;
@@ -48,7 +46,7 @@ chatGptRouter.post('/chat', async (req, res) => {
     const result = ChatDataService.saveChatData(chatData);
 
     if (result) {
-      res.status(201).json({ data: resp });
+      res.status(201).json({ data: result });
     }
     else {
       res.sendStatus(400);

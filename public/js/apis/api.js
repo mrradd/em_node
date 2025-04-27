@@ -3,7 +3,7 @@ const baseServerUrl = "http://localhost:3042";
 class RadServerApi {
   /**
    * Makes a request to the server API to see if it is running.
-   * @returns fetch response object.
+   * @returns `ChatDataModelDto` object.
    */
   static async chat (requestText) {
     try {
@@ -18,8 +18,10 @@ class RadServerApi {
       if(!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
-
-      return await response.json();
+      const json = await response.json();
+      let dto = new ChatDataModelDto();
+      dto = json.data;
+      return dto
     }
     catch (error) {
       console.log(`ERROR ServerApi::chat ${error.message}`);
@@ -35,7 +37,8 @@ class RadServerApi {
         throw new Error(`Response status: ${response.status}`);
       }
 
-      return await response.json();
+      const json = await response.json();
+      return json;
     }
     catch (error) {
       console.log(`ERROR ServerApi::getAllChats ${error.message}`);
