@@ -1,0 +1,13 @@
+{
+  "apps": [
+    {
+      "name": "electric-meatball",
+      "script": "./src/server.js",
+      "env_local": {
+        "CHAT_GPT_MODEL": "gpt-4o-mini",
+        "OPEN_AI_KEY": "keys-to-the-lamborghini",
+        "PORT": "3042"
+      }
+    }
+  ]
+}
