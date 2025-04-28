@@ -10,6 +10,6 @@ class ChatDataModelDto {
     this.prompt_tokens = 0;
     this.completion_tokens = 0;
     this.reasoning_tokens = 0;
-    this.date = "";
+    this.date_iso = "";
   }
 }

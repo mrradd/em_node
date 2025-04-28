@@ -14,14 +14,20 @@
   - [x] Save chat metrics to db.
   - [x] Load previous chats.
 - [ ] Delete single chat.
-- [ ] Allow for separate chats threads.
+- [-] Allow for separate chat threads.
   - [ ] Show all chat threads in a list.
   - [ ] Select and load a specific chat thread.
   - [ ] Delete a chat thread.
+  - [ ] Use chat contexts.
 - [x] Signify loading when waiting for api response.
 - [x] Make a fetch request.
 - [x] Send llm request from user text input.
-- [ ] Implement response API.
+- [ ] Implement memories.
+  - [ ] Make users table.
+  - [ ] Make memories table.
+  - [ ] Associate memories with users.
+  - [ ] Make memories prompt.
+  - [ ] Make memories editable.
 - [x] Display a single chat on screen.
 - [ ] Validation.
 - [ ] Exports

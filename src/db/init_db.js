@@ -6,7 +6,6 @@ export const initDb = () => {
     TheDB.exec("BEGIN");
     TheDB.exec(`CREATE TABLE IF NOT EXISTS chat_data(
       id TEXT PRIMARY KEY,
-      response_id TEXT,
       chat_id TEXT,
       prompt TEXT,
       response TEXT,
@@ -15,8 +14,29 @@ export const initDb = () => {
       prompt_tokens INTEGER,
       completion_tokens INTEGER,
       reasoning_tokens INTEGER,
-      date TEXT
+      date_iso TEXT
     );`);
+
+    TheDB.exec(`CREATE TABLE IF NOT EXISTS chat_threads (
+      id TEXT PRIMARY KEY,
+      title TEXT
+    );`);
+
+    TheDB.exec(`CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      username TEXT
+    );`);
+
+    TheDB.exec(`CREATE TABLE IF NOT EXISTS chat_threads__chat_data_map (
+      chat_thread_id TEXT,
+      chat_data_id TEXT UNIQUE
+    );`);
+
+    TheDB.exec(`CREATE TABLE IF NOT EXISTS users__chat_threads_map (
+      user_id TEXT,
+      chat_thread_id TEXT UNIQUE
+    );`);
+
     TheDB.exec("COMMIT");
     console.log("Finished initializing the DB.");
   }

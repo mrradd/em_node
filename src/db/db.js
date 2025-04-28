@@ -46,7 +46,7 @@ export class ChatDataService {
         prompt_tokens: prompt_tokens,
         completion_tokens: completion_tokens,
         reasoning_tokens: reasoning_tokens,
-        date: `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`,
+        date_iso: `${date.toISOString()}`,
       };
 
       insertChatData.run(
@@ -60,7 +60,7 @@ export class ChatDataService {
         newChatObj.prompt_tokens,
         newChatObj.completion_tokens,
         newChatObj.reasoning_tokens,
-        newChatObj.date,
+        newChatObj.date_iso,
       );
 
       TheDB.exec("COMMIT;");

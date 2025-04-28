@@ -95,7 +95,7 @@ const RadIndexMain = () => {
         }
 
         const responseObj = new ChatResponse({
-          dateStr: chatResponse.date,
+          dateStr: chatResponse.date_iso,
           prompt: chatResponse.prompt,
           response: chatResponse.response,
         });
