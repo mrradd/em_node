@@ -6,7 +6,7 @@
       "env_local": {
         "CHAT_GPT_MODEL": "gpt-4o-mini",
         "OPEN_AI_KEY": "keys-to-the-lamborghini",
-        "PORT": "3042"
+        "PORT": "3069"
       }
     }
   ]

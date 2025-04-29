@@ -161,6 +161,10 @@ const RadIndexMain = () => {
     renderPageTop();
     renderMainContent();
     renderBottomContent();
+
+    //Go to the bottom of the responses list.
+    const responseListDiv = document.getElementById("responses_section");
+    responseListDiv.scrollTop = responseListDiv.scrollHeight;
   };
 
   const exportObject = {

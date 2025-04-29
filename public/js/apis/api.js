@@ -1,13 +1,28 @@
-const baseServerUrl = "http://localhost:3042";
+const getHostUrl = () => {
+  if(window.location.port?.length > 0) {
+    return `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
+  }
+  else {
+    return `${window.location.protocol}//${window.location.hostname}`;
+  }
+}
+
+let apiBaseUrl = "";
 
 class RadServerApi {
+
+  constructor() {
+    apiBaseUrl = getHostUrl();
+    console.log(apiBaseUrl);
+  }
+
   /**
    * Makes a request to the server API to see if it is running.
    * @returns `ChatDataModelDto` object.
    */
   static async chat (requestText) {
     try {
-      const response = await fetch(`${baseServerUrl}/api/llm/chat`, {
+      const response = await fetch(`${apiBaseUrl}/api/llm/chat`, {
         method: "post",
         body: JSON.stringify({requestText: requestText}),
         headers: {
@@ -31,7 +46,7 @@ class RadServerApi {
 
   static async getAllMessages (){
     try {
-      const response = await fetch(`${baseServerUrl}/api/llm/all`, {method: "get",});
+      const response = await fetch(`${apiBaseUrl}/api/llm/all`, {method: "get",});
 
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
@@ -52,7 +67,7 @@ class RadServerApi {
    */
   static async heartbeat(){
     try {
-      const response = await fetch(`${baseServerUrl}/heartbeat`);
+      const response = await fetch(`${apiBaseUrl}/heartbeat`);
       if(!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
