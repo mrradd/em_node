@@ -8,6 +8,7 @@
     "start": "nodemon src/server.js",
     "init_db": "node src/db/init_db.js",
     "update_db": "node src/db/update_db.js",
+    "pm2_local": "pm2 start em.pm2.config.json --only electric-meatball --env local",
     "test": "jest"
   },
   "author": "Your Name",
