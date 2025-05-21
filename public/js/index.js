@@ -5,12 +5,12 @@
 const RadIndexMain = () => {
 
   /**
-   * 
+   * Renders the bottom portion of the page.
    */
   const renderBottomContent = () => {
     const pageBottomNode = document.getElementById("page_bottom");
     
-    const poweredBy = rad_lib.radCreateElement({
+    const poweredBy = RadLib.radCreateElement({
       htmlTagName: "a",
       elementId: "powered_by",
       innerText: "Powered by The Senator",
@@ -21,7 +21,7 @@ const RadIndexMain = () => {
   };
 
   /**
-   * 
+   * Renders the main container of the page.
    */
   const renderMainContainer = () => {
     const mainContainer = document.getElementById("main_container");
@@ -29,19 +29,19 @@ const RadIndexMain = () => {
   };
 
   /**
-   * 
+   * Renders the primary content of the page.
    */
   const renderMainContent = () => {
     const mainContentNode = document.getElementById("main_content");
 
     /** START middle main content. **/
-    const middleContent = rad_lib.radCreateElement({
+    const middleContent = RadLib.radCreateElement({
       htmlTagName: "div",
       elementId: "middle_main_content",
-      styles: [style_CenterFlex, style_PaddingNormal],
+      styles: [style_CenterFlex],
     });
     
-    const responsesSection = rad_lib.radCreateElement({
+    const responsesSection = RadLib.radCreateElement({
       htmlTagName: "div",
       elementId: "responses_section",
       styles: [style_ResponsesSection]
@@ -65,29 +65,29 @@ const RadIndexMain = () => {
     /** END middle main content. **/
 
     /** START lower main content. **/
-    const lowerContent = rad_lib.radCreateElement({
+    const lowerContent = RadLib.radCreateElement({
       htmlTagName: "div",
       elementId: "lower_main_content",
-      styles: [style_CenterFlex, style_PaddingNormal],
+      styles: [style_CenterFlex],
     });
     
-    const resquestTextArea = rad_lib.radCreateElement({
+    const resquestTextArea = RadLib.radCreateElement({
       htmlTagName: "textarea",
       elementId: "user_request_text",
       styles: [style_RequestTextarea],
     });
 
-    const submitButton = rad_lib.radCreateButton({
+    const submitButton = RadLib.radCreateButton({
       label: "Submit Request",
       elementId: "submit_request_button",
       styles: [style_MarginNormal],
       onclickFn: async () => {
 
-        rad_lib.radThrobberShow({
+        RadLib.radThrobberShow({
           parentElement: middleContent
         });
         const chatResponse = await RadServerApi.chat(resquestTextArea.value);
-        rad_lib.radThrobberRemove();
+        RadLib.radThrobberRemove();
 
         if(!chatResponse) {
           alert("ERROR: submitButton: No chat response.");
@@ -114,18 +114,32 @@ const RadIndexMain = () => {
     lowerContent.appendChild(submitButton);
     /** END lower main content. **/
 
+    /** START left side content. **/
+    const leftSideContent = RadLib.radCreateElement({
+      htmlTagName: "div",
+      elementId: "left_main_content",
+    });
+    const sectionTitle = RadLib.radCreateElement({
+      htmlTagName: "h3",
+      innerText: "Chats",
+    });
+
+    leftSideContent.appendChild(sectionTitle);
+    /** END left side content. **/
+
     /** Append to Main Content. */
     mainContentNode.appendChild(middleContent);
+    mainContentNode.appendChild(leftSideContent);
     mainContentNode.appendChild(lowerContent);
   };
 
   /**
-   * 
+   * Renders the header and title for the page.
    */
   const renderPageTop = () => {
     const pageTopNode = document.getElementById("page_top");
     
-    const title = rad_lib.radCreateElement({
+    const title = RadLib.radCreateElement({
       htmlTagName: "h1",
       classNames: ["app_title"],
     });
@@ -135,13 +149,13 @@ const RadIndexMain = () => {
   };
 
   /**
-   * Creates an element that displays the chate prompt and response.
+   * Creates an element that displays the chat prompt and response.
    * @param chatResponseStr `string` - Response from ChatGPT.
    * @param key `string` - Unique identifier that is appended to the ID of the element.
    * @returns 
    */
   const renderResponseSection = (chatResponseStr, key) => {
-    const responseSection = rad_lib.radCreateElement({
+    const responseSection = RadLib.radCreateElement({
       htmlTagName: "p",
       elementId: `response_section_${key}`,
       classNames: ["response_section"],
@@ -152,7 +166,7 @@ const RadIndexMain = () => {
   };
 
   /**
-   * 
+   * Renders the page.
    */
   const render = async () => {
     const chats = await RadServerApi.getAllMessages();

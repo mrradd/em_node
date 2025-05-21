@@ -1,6 +1,7 @@
 body {
   background-color: rgb(33, 33, 33);
   color: rgb(243,243,243);
+  font-size: 16px;
 }
 
 .response_section {
@@ -10,4 +11,27 @@ body {
 
 .powered_by {
   color: red;
+}
+
+#main_content {
+  display: grid;
+  grid-template-areas:
+    "left middle"
+    "left lower";
+  gap: 1rem
+}
+
+#middle_main_content {
+  grid-area: middle;
+}
+
+#left_main_content {
+  grid-area: left;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#lower_main_content {
+  grid-area: lower;
 }

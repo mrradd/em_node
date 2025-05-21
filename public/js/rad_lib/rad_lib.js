@@ -1,10 +1,24 @@
-const RadLib = () => {
-  const CSS_CLASSES = {
-    rad_button: "rad_button",
-  };
-  const RAD_ELEMENT_IDS = {
-    rad_throbber: "rad_throbber",
-  };
+/**
+ * Every function in this library is, and should stay, static.
+ * 
+ * TODO CH
+ * > Make <img> element function.
+ * > Make <a> element function
+ */
+class RadLib {
+  static RAD_ELEMENT_IDS() {
+    return {
+      rad_throbber: "rad_throbber"
+    };
+  }
+
+  constructor() {}
+
+  static CSS_CLASSES() {
+    return {
+      rad_button: "rad_button",
+    }
+  }
 
   /**
    * Creates an HTML button element with the passed in values.
@@ -16,15 +30,15 @@ const RadLib = () => {
    * @returns HTML button element.
    * @throws
    */
-  const radCreateButton = ({elementId = "", label, onclickFn, classNames = [], styles = []}) => {
+  static radCreateButton ({elementId = "", label, onclickFn, classNames = [], styles = []}) {
     if(!onclickFn) {
       throw new Error("onclickFn must be defined.");
     }
 
-    const button = radCreateElement({
+    const button = RadLib.radCreateElement({
       htmlTagName: "button",
       elementId: elementId,
-      classNames: [...classNames, CSS_CLASSES.rad_button],
+      classNames: [...classNames, RadLib.CSS_CLASSES().rad_button],
       styles,
     });
 
@@ -43,7 +57,7 @@ const RadLib = () => {
    * @returns HTML element of the type defined by htmlTagName.
    * @throws
    */
-  const radCreateElement = ({htmlTagName, elementId = "", classNames = [], styles = [], innerText = ""}) => {
+  static radCreateElement ({htmlTagName, elementId = "", classNames = [], styles = [], innerText = ""}) {
     if(!htmlTagName) {
       throw new Error("htmlTagName must be provided.");
     }
@@ -54,7 +68,11 @@ const RadLib = () => {
     }
     
     if(classNames?.length > 0) {
-      element.classList = [...classNames];
+      let list = [...classNames]
+
+      //We get rid of the commas, because if we just gave it an array it would be comma separated--CSS doesn't work like that.
+      let str = list.join(',').replace(',', ' ');
+      element.classList = str;
     }
 
     if(styles?.length > 0) {
@@ -72,51 +90,34 @@ const RadLib = () => {
    * Opens a new tab at the passed in url.
    * @param url `string` - URL to navigate to in the new tab.
    */
-  const radOpenNewTabAt = ({url}) => {
-    //TODO CH  MAKE VALIDATION MORE ROBUST.
+  static radOpenNewTabAt({url}) {
     if(!url || url?.length === 0) {
       console.log("radOpenNewTabAt: Invalid url.");
       return;
     }
 
     window.open(url, "_blank");
-  };
+  }
 
   /**
    * Removes the Rad Throbber.
    */
-  const radThrobberRemove = () => {
-    const throbber = document.getElementById(RAD_ELEMENT_IDS.rad_throbber);
+  static radThrobberRemove() {
+    const throbber = document.getElementById(RadLib.RAD_ELEMENT_IDS().rad_throbber);
     throbber.remove();
-  };
+  }
 
   /**
    * Appends the Rad Throbber to the passed in element.
    * @param parentElement `HTMLElement` - The HTML Element to append the throbber to.
    */
-  const radThrobberShow = ({parentElement}) => {
+  static radThrobberShow({parentElement}) {
     //TODO CH  TURN INTO AN ACTUAL THROBBER.
-    const throbber = rad_lib.radCreateElement({
+    const throbber = RadLib.radCreateElement({
       htmlTagName: "div",
-      elementId: RAD_ELEMENT_IDS.rad_throbber,
+      elementId: RadLib.RAD_ELEMENT_IDS().rad_throbber,
       innerText: "...THINKING...",
     });
     parentElement.appendChild(throbber);
-  };
-
-  /** All the exposed public properties. */
-  const exportObject = {
-    radCreateButton: radCreateButton,
-    radCreateElement: radCreateElement,
-    radOpenNewTabAt: radOpenNewTabAt,
-    radThrobberRemove: radThrobberRemove,
-    radThrobberShow: radThrobberShow,
-  };
-  return exportObject;
+  }
 };
-
-/**
- * General purpose library for Rad stuff.
- * @returns `Object` containing public attributes and functions.
- **/
-const rad_lib = RadLib();
