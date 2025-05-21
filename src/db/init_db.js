@@ -5,18 +5,32 @@ export const initDb = () => {
     console.log("Initializing the DB...");
     TheDB.exec("BEGIN");
 
+    //TODO CH  ADD ABILITY TO HASH PASSWORDS TO SECURE ACCOUNTS LATER. NOT A BIG DEAL AS THIS IS JUST FOR MYSELF RIGHT NOW.
     TheDB.exec(`CREATE TABLE IF NOT EXISTS users(
       id TEXT PRIMARY KEY, --UUID
       username TEXT,
-      password TEXT, --ENCRYPTED
-      password_iv TEXT,
+      --hashed_password TEXT,
+      --salt TEXT,
       date_created TEXT
     );`);
+    
+    //Create a temporary user for testing purposes.
+    TheDB.exec(`INSERT INTO users (id, username, date_created)
+      VALUES('10000000-0000-0000-0000-000000000000','testuser', date()
+    );`);
 
-    //TODO CH  FK TO USERS
+    TheDB.exec(`CREATE TABLE IF NOT EXISTS chat_group(
+      id TEXT PRIMARY KEY, --UUID
+      user_id TEXT, --UUID,
+      display_name TEXT,
+      date_created TEXT,
+      FOREIGN KEY(user_id) REFERENCES users(id)
+    );`);
+
     TheDB.exec(`CREATE TABLE IF NOT EXISTS chat_data(
       id TEXT PRIMARY KEY, --UUID
-      user_id TEXT, --UUID
+      user_id TEXT, --UUID,
+      chat_group_id, --UUID
       response_id TEXT,
       chat_id TEXT, --From ChatGPT
       prompt TEXT,
@@ -26,24 +40,17 @@ export const initDb = () => {
       prompt_tokens INTEGER,
       completion_tokens INTEGER,
       reasoning_tokens INTEGER,
-      date TEXT
+      date TEXT,
+      FOREIGN KEY(user_id) REFERENCES users(id),
+      FOREIGN KEY(chat_group_id) REFERENCES chat_group(id)
     );`);
 
-    //TODO CH  FK TO USERS
     TheDB.exec(`CREATE TABLE IF NOT EXISTS memories(
       id TEXT PRIMARY KEY, --UUID
       user_id TEXT, --UUID
       description TEXT,
-      date_created TEXT
-    );`);
-
-    //TODO CH  FK TO USERS AND CHAT_DATA
-    TheDB.exec(`CREATE TABLE IF NOT EXISTS chats(
-      id TEXT PRIMARY KEY, --UUID
-      user_id TEXT, --UUID
-      chat_data_id TEXT, --UUID
-      display_name TEXT,
-      date_created TEXT
+      date_created TEXT,
+      FOREIGN KEY(user_id) REFERENCES users(id)
     );`);
 
     TheDB.exec(`CREATE TABLE IF NOT EXISTS versions(
@@ -53,8 +60,16 @@ export const initDb = () => {
     );`);
 
     TheDB.exec(`CREATE TABLE IF NOT EXISTS gpt_models(
-      id TEXT PRIMARY KEY,
+      id TEXT PRIMARY KEY, --UUID
       name TEXT
+    );`);
+
+    TheDB.exec(`INSERT INTO gpt_models (id, name)
+      VALUES('20000000-0000-0000-0000-000000000000', 'gpt-4o-mini'
+    );`);
+
+    TheDB.exec(`INSERT INTO gpt_models (id, name)
+      VALUES('30000000-0000-0000-0000-000000000000', 'dall-e-3'
     );`);
 
     TheDB.exec("COMMIT");
