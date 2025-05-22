@@ -18,7 +18,7 @@ class RadServerApi {
 
   /**
    * Makes a request to the server API to see if it is running.
-   * @returns `ChatDataModelDto` object.
+   * @returns `ChatDataDto` object or null on failure.
    */
   static async chat (requestText) {
     try {
@@ -34,7 +34,7 @@ class RadServerApi {
         throw new Error(`Response status: ${response.status}`);
       }
       const json = await response.json();
-      let dto = new ChatDataModelDto();
+      let dto = new ChatDataDto();
       dto = json.data;
       return dto
     }
@@ -63,7 +63,7 @@ class RadServerApi {
 
   /**
    * Makes a request to the server API to see if it is running.
-   * @returns fetch response object.
+   * @returns fetch response object or null on failure.
    */
   static async heartbeat(){
     try {

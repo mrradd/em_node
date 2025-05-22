@@ -6,7 +6,7 @@
  * > Make <a> element function
  */
 class RadLib {
-  static RAD_ELEMENT_IDS() {
+  static ELEMENT_IDS() {
     return {
       rad_throbber: "rad_throbber"
     };
@@ -103,7 +103,7 @@ class RadLib {
    * Removes the Rad Throbber.
    */
   static radThrobberRemove() {
-    const throbber = document.getElementById(RadLib.RAD_ELEMENT_IDS().rad_throbber);
+    const throbber = document.getElementById(RadLib.ELEMENT_IDS().rad_throbber);
     throbber.remove();
   }
 
@@ -115,7 +115,7 @@ class RadLib {
     //TODO CH  TURN INTO AN ACTUAL THROBBER.
     const throbber = RadLib.radCreateElement({
       htmlTagName: "div",
-      elementId: RadLib.RAD_ELEMENT_IDS().rad_throbber,
+      elementId: RadLib.ELEMENT_IDS().rad_throbber,
       innerText: "...THINKING...",
     });
     parentElement.appendChild(throbber);

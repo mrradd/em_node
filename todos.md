@@ -36,8 +36,8 @@
   - [ ] Style the buttons.
   - [ ] Replace inline css with stylesheets where appropriate.
 - [ ] Button to copy a raw response section md text to the clipboard.
-- [ ] Allow selecting different ChatGPT models.
-  - [ ] Add the different models to the database.
+- [-] Allow selecting different ChatGPT models.
+  - [x] Add the different models to the database.
   - [ ] Load the different models into a list in the UI.
 - [x] Implement PM2 support.
 - [ ] Clean up duped code.
