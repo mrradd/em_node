@@ -24,7 +24,8 @@ function init() {
         const createChatsDatas = TheDb.prepare(`CREATE TABLE IF NOT EXISTS chat_datas (
             id TEXT PRIMARY KEY NOT NULL,
             model TEXT NOT NULL,
-            tokens INTEGER NOT NULL,
+            input_tokens INTEGER NOT NULL,
+            output_tokens INTEGER NOT NULL,
             created_date TEXT NOT NULL);`);
 
         const createChatThreadsChatsMap = TheDb.prepare(`CREATE TABLE IF NOT EXISTS chat_threads__chats_map (
