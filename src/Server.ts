@@ -15,7 +15,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/heartbeat", (req, res) => {
+app.get("/api/v1/heartbeat", (req, res) => {
     res.json({ data: "42" });
 });
 

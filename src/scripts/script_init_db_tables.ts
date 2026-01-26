@@ -48,11 +48,22 @@ function init() {
             version_number TEXT NOT NULL);`);
 
         const create = TheDb.transaction(() => {
+            console.log("Creating chats table");
             createChats.run();
+
+            console.log("Creating chat_threads table");
             createChatThreads.run();
+
+            console.log("Creating chat_datas table");
             createChatsDatas.run();
+
+            console.log("Creating chat_threads -> chats map table");
             createChatThreadsChatsMap.run();
+
+            console.log("Creating chats -> chat_datas map table");
             createChatsChatDatasMap.run();
+
+            console.log("Creating migrations table");
             createMigrations.run();
         });
 
