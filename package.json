@@ -1,0 +1,27 @@
+{
+  "name": "electric_meatball_be",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node src/Server.ts",
+    "build": "tsc",
+    "start": "node dist/Server.js",
+    "init_db": "ts-node src/scripts/script_init_db_tables.ts"
+  },
+  "dependencies": {
+    "better-sqlite3": "12.5.0",
+    "cors": "2.8.5",
+    "dotenv": "17.2.3",
+    "express": "5.2.1",
+    "openai": "^6.15.0",
+    "ts-node": "10.9.2",
+    "typescript": "5.9.3",
+    "zod": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/cors": "^2.8.19",
+    "@types/express": "5.0.6",
+    "@types/node": "25.0.3"
+  }
+}
