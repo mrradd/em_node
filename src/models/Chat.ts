@@ -1,0 +1,7 @@
+export type Chat = {
+  id: string, //uuid
+  thread_id: string, //uuid
+  message: string,
+  role: string, //system | user | assistant
+  timestamp: number, //in ms.
+};

@@ -12,40 +12,28 @@ function init() {
     try {
         const createChats = TheDb.prepare(`CREATE TABLE IF NOT EXISTS chats (
             id TEXT PRIMARY KEY NOT NULL,
+            thread_id TEXT NOT NULL,
             message TEXT NOT NULL,
             role TEXT NOT NULL,
-            created_date TEXT NOT NULL);`);
+            timestamp INTEGER NOT NULL,
+            FOREIGN KEY(thread_id) REFERENCES chat_threads(id));`);
 
         const createChatThreads = TheDb.prepare(`CREATE TABLE IF NOT EXISTS chat_threads (
             id TEXT PRIMARY KEY NOT NULL,
             name TEXT NOT NULL,
-            created_date TEXT NOT NULL);`);
+            timestamp INTEGER NOT NULL);`);
 
         const createChatsDatas = TheDb.prepare(`CREATE TABLE IF NOT EXISTS chat_datas (
             id TEXT PRIMARY KEY NOT NULL,
             model TEXT NOT NULL,
             input_tokens INTEGER NOT NULL,
             output_tokens INTEGER NOT NULL,
-            created_date TEXT NOT NULL);`);
-
-        const createChatThreadsChatsMap = TheDb.prepare(`CREATE TABLE IF NOT EXISTS chat_threads__chats_map (
-            thread_id TEXT NOT NULL,
-            chat_id TEXT NOT NULL,
-            PRIMARY KEY (thread_id, chat_id),
-            FOREIGN KEY(chat_id) REFERENCES chats(id),
-            FOREIGN KEY(thread_id) REFERENCES chat_threads(id));`);
-
-        const createChatsChatDatasMap = TheDb.prepare(`CREATE TABLE IF NOT EXISTS chats__chat_datas_map (
-            chat_id TEXT NOT NULL,
-            chat_data_id TEXT NOT NULL,
-            PRIMARY KEY (chat_data_id, chat_id),
-            FOREIGN KEY(chat_id) REFERENCES chats(id),
-            FOREIGN KEY(chat_data_id) REFERENCES chat_datas(id));`);
+            timestamp INTEGER NOT NULL);`);
 
         const createMigrations = TheDb.prepare(`CREATE TABLE IF NOT EXISTS migrations(
             id TEXT PRIMARY KEY,
-            date TEXT NOT NULL,
-            version_number TEXT NOT NULL);`);
+            version_number TEXT NOT NULL,
+            timestamp INTEGER NOT NULL);`);
 
         const create = TheDb.transaction(() => {
             console.log("Creating chats table");
@@ -56,12 +44,6 @@ function init() {
 
             console.log("Creating chat_datas table");
             createChatsDatas.run();
-
-            console.log("Creating chat_threads -> chats map table");
-            createChatThreadsChatsMap.run();
-
-            console.log("Creating chats -> chat_datas map table");
-            createChatsChatDatasMap.run();
 
             console.log("Creating migrations table");
             createMigrations.run();
