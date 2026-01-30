@@ -1,13 +1,14 @@
 import OpenAI from "openai";
 import { Chat } from "../models/Chat";
 import { MODEL, OPENAI_API_KEY } from "../EMConfig";
+import { ChatRequestDTO } from "../DTOs/ChatRequestDTO";
 
 const openaiClient = new OpenAI({
     apiKey: OPENAI_API_KEY
   }
 );
 
-export async function sendChatRequest(message: string, threadId: string): Promise<string | null> {
+async function sendChatRequest({message, threadId}: ChatRequestDTO): Promise<string | null> {
 
   //todo ch  compile a list of chats/responses from thread to send to completion api.
 
@@ -23,4 +24,8 @@ export async function sendChatRequest(message: string, threadId: string): Promis
   //todo ch save response data.
   //todo ch create response object.
   return completion.choices[0].message.content;
+}
+
+export const ChatBusinessLogic = {
+  sendChatRequest,
 }

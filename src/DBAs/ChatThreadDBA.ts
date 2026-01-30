@@ -1,37 +1,36 @@
 import { ChatThread } from "../models/ChatThread";
 import { TheDb } from "../Server";
 
-async function createChatThread(threadName: string): Promise<ChatThread | null> {
+/**
+ * 
+ * @param threadName 
+ * @returns 
+ */
+function createChatThread(threadName: string): ChatThread | null {
   try{
-    const insertQuery = `
+    const insertStmt = TheDb.prepare(`
 INSERT INTO chat_threads (id, name, created_timestamp)
-VALUES($id, $name, $created_timestamp);`;
+VALUES(@id , @name, @created_timestamp);`);
     
     const newThread: ChatThread = {
       id: crypto.randomUUID(),
       name: threadName,
       created_timestamp: Date.now(),
     };
-
-    await TheDb.run("BEGIN TRANSACTION;");
     
-    await TheDb.run(insertQuery, {
-        $id: newThread.id,
-        $name: newThread.name,
-        $created_timestamp: newThread.created_timestamp,
-      }
-    );
+    const insert = TheDb.transaction((theThread: ChatThread) => {
+      insertStmt.run(theThread);
+    });
 
-    await TheDb.run("COMMIT;")
+    insert(newThread);
 
     return newThread;
   }
   catch (err:any){
-    await TheDb.run("ROLLBACK;");
-    return null;
+    throw err;
   }
 }
 
 export const ChatThreadDBA = {
-createChatThread
+  createChatThread
 };
