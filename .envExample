@@ -1,4 +1,5 @@
 DATABASE_NAME=em.db
 HOST=localhost
 PORT=3000
+MODEL=gpt-5-nano-2025-08-07
 OPENAI_API_KEY=your-openai-api-key

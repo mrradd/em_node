@@ -1,15 +1,12 @@
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import { chatRouter } from "./routes/ChatRouter";
+import { DATABASE_NAME, HOST, PORT, validateSettings } from "./EMConfig";
 
-dotenv.config();
+validateSettings();
 
 const Database = require("better-sqlite3");
-export const TheDb = new Database(process.env.DATABASE_NAME);
-
-const PORT = Number(process.env.PORT || 3000);
-const HOST = process.env.HOST || "localhost";
+export const TheDb = new Database(DATABASE_NAME);
 
 const app = express();
 
@@ -22,10 +19,15 @@ app.get("/api/v1/heartbeat", (req, res) => {
     res.json({ data: "42" });
 });
 
-const server = app.listen(PORT, HOST, () => {
-    console.log(`Server is running on port http://${HOST}:${PORT}`);
+// A general error handling middleware.
+app.use((err: any, req: any, res: any, next: any) => {
+    console.error(err.stack);
+    return res.status(500).json({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong on the server."
+    });
 });
 
-server.on("error", (err) => {
-    console.error("Server error:", err.message);
+const server = app.listen(PORT, HOST, () => {
+    console.log(`\nServer is running on port http://${HOST}:${PORT}`);
 });

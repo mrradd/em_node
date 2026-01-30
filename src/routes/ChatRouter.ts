@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { sendChatRequest } from "../BusinessLogic/ChatBusinessLogic";
 
 export const chatRouter = Router();
 
@@ -6,15 +7,10 @@ export const chatRouter = Router();
 //api/v1/chat/send
 //Sends a chat request to an LLM for a specific ChatThread for the given prompt and all the thread's related chats. 
 chatRouter.post("/send", async (req, res) => {
-  try {
-    console.log(req.body);
-    res.json({
-      data: "Yay.",
-    });
-  }
-  catch(err: any) {
-    //TODO
-  }
+  const resp = await sendChatRequest(req.body.message, req.body.threadId);
+  res.json({
+    data: resp,
+  });  
 });
 
 //POST
