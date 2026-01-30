@@ -15,32 +15,33 @@ function init() {
             thread_id TEXT NOT NULL,
             message TEXT NOT NULL,
             role TEXT NOT NULL,
-            timestamp INTEGER NOT NULL,
+            created_timestamp INTEGER NOT NULL,
             FOREIGN KEY(thread_id) REFERENCES chat_threads(id));`);
 
         const createChatThreads = TheDb.prepare(`CREATE TABLE IF NOT EXISTS chat_threads (
             id TEXT PRIMARY KEY NOT NULL,
             name TEXT NOT NULL,
-            timestamp INTEGER NOT NULL);`);
+            created_timestamp INTEGER NOT NULL);`);
 
         const createChatsDatas = TheDb.prepare(`CREATE TABLE IF NOT EXISTS chat_datas (
             id TEXT PRIMARY KEY NOT NULL,
             model TEXT NOT NULL,
             input_tokens INTEGER NOT NULL,
             output_tokens INTEGER NOT NULL,
-            timestamp INTEGER NOT NULL);`);
+            created_timestamp INTEGER NOT NULL);`);
 
         const createMigrations = TheDb.prepare(`CREATE TABLE IF NOT EXISTS migrations(
             id TEXT PRIMARY KEY,
             version_number TEXT NOT NULL,
-            timestamp INTEGER NOT NULL);`);
+            created_timestamp INTEGER NOT NULL);`);
 
         const create = TheDb.transaction(() => {
-            console.log("Creating chats table");
-            createChats.run();
 
             console.log("Creating chat_threads table");
             createChatThreads.run();
+
+            console.log("Creating chats table");
+            createChats.run();
 
             console.log("Creating chat_datas table");
             createChatsDatas.run();

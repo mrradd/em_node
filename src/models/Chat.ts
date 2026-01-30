@@ -3,5 +3,5 @@ export type Chat = {
   thread_id: string, //uuid
   message: string,
   role: string, //system | user | assistant
-  timestamp: number, //in ms.
+  created_timestamp: number, //in ms.
 };

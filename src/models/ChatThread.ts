@@ -1,5 +1,5 @@
 export type ChatThread = {
   id: string, //uuid
   name: string,
-  timestamp: number, //in ms.
+  created_timestamp: number, //in ms.
 };

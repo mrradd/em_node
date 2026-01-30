@@ -22,7 +22,7 @@ app.get("/api/v1/heartbeat", (req, res) => {
 // A general error handling middleware.
 app.use((err: any, req: any, res: any, next: any) => {
     console.error(err.stack);
-    return res.status(500).json({
+    res.status(500).json({
         code: "INTERNAL_SERVER_ERROR",
         message: "Something went wrong on the server."
     });
