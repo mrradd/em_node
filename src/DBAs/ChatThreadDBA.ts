@@ -1,11 +1,6 @@
 import { ChatThread } from "../models/ChatThread";
 import { TheDb } from "../Server";
 
-/**
- * 
- * @param threadName 
- * @returns 
- */
 function createChatThread(threadName: string): ChatThread | null {
   try{
     const insertStmt = TheDb.prepare(`

@@ -3,11 +3,6 @@ import { ChatThreadLiteDTO } from "../DTOs/ChatThreadLiteDTO";
 import { ChatThreadDBA } from "../DBAs/ChatThreadDBA";
 import { CreateChatThreadRequestDTO } from "../DTOs/CreateChatThreadRequestDTO";
 
-/**
- * 
- * @param threadName 
- * @returns 
- */
 export function createNewChatThread({ threadName }: CreateChatThreadRequestDTO): ChatThreadLiteDTO {
   const resp: ChatThread | null = ChatThreadDBA.createChatThread(threadName);
 
