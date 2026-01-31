@@ -9,16 +9,16 @@ export const chatRouter = Router();
 //Sends a chat request to an LLM for a specific ChatThread for the given prompt and all the thread's related chats. 
 chatRouter.post("/send", async (req, res) => {
   const result = await ChatBusinessLogic.sendChatRequest(req.body);
-  res.json({data: result});
+  res.json({ data: result });
 });
 
 //POST
 //api/v1/chat/thread/create
 //Creates a new ChatThread.
 chatRouter.post("/thread/create", (req, res) => {
-  const result = ChatThreadBusinessLogic.createNewChatThread(req.body.threadName);
+  const result = ChatThreadBusinessLogic.createNewChatThread(req.body);
   console.info(`Created chat thread ${result.id} | ${result.name}`)
-  res.json({data: result});
+  res.json({ data: result });
 });
 
 //PATCH

@@ -2,28 +2,23 @@ import { ChatThread } from "../models/ChatThread";
 import { TheDb } from "../Server";
 
 function createChatThread(threadName: string): ChatThread | null {
-  try{
-    const insertStmt = TheDb.prepare(`
+  const insertStmt = TheDb.prepare(`
 INSERT INTO chat_threads (id, name, created_timestamp)
 VALUES(@id , @name, @created_timestamp);`);
-    
-    const newThread: ChatThread = {
-      id: crypto.randomUUID(),
-      name: threadName,
-      created_timestamp: Date.now(),
-    };
-    
-    const insert = TheDb.transaction((theThread: ChatThread) => {
-      insertStmt.run(theThread);
-    });
 
-    insert(newThread);
+  const newThread: ChatThread = {
+    id: crypto.randomUUID(),
+    name: threadName,
+    created_timestamp: Date.now(),
+  };
 
-    return newThread;
-  }
-  catch (err:any){
-    throw err;
-  }
+  const txn = TheDb.transaction((theThread: ChatThread) => {
+    insertStmt.run(theThread);
+  });
+
+  txn(newThread);
+
+  return newThread;
 }
 
 export const ChatThreadDBA = {

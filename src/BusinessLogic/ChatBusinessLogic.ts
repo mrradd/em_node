@@ -2,28 +2,51 @@ import OpenAI from "openai";
 import { Chat } from "../models/Chat";
 import { MODEL, OPENAI_API_KEY } from "../EMConfig";
 import { ChatRequestDTO } from "../DTOs/ChatRequestDTO";
+import { ChatDBA } from "../DBAs/ChatDBA";
 
 const openaiClient = new OpenAI({
-    apiKey: OPENAI_API_KEY
-  }
-);
+  apiKey: OPENAI_API_KEY
+});
 
-async function sendChatRequest({message, threadId}: ChatRequestDTO): Promise<string | null> {
+async function sendChatRequest({ message, threadId }: ChatRequestDTO): Promise<string | null> {
+  const chats: Chat[] | null = ChatDBA.getChatsInThread(threadId);
 
-  //todo ch  compile a list of chats/responses from thread to send to completion api.
-
-  const completion = await openaiClient.chat.completions.create({
-    model: MODEL,
-    messages: [
-      {role: "user", content: message}
-    ]
+  //Get all the previous chats in the thread to send in the request.
+  //HACK: using `any` to make the compiler shut up.
+  const inputs: any = chats!.map((chat) => {
+    return {
+      role: chat.role,
+      content: chat.message,
+    };
   });
 
-  //todo ch save user's passed in message.
-  //todo ch save response message.
+  //Add the new message to the end of the input list.
+  inputs.push({ role: 'user', content: message });
+
+  const response = await openaiClient.responses.create({
+    model: MODEL,
+    input: inputs,
+  });
+
+  const newChat = {
+    thread_id: threadId,
+    message: message,
+    role: "user",
+  } as Chat;
+
+  ChatDBA.saveChat(newChat);
+
+  const newResponse = {
+    thread_id: threadId,
+    message: response.output_text,
+    role: "assistant",
+  } as Chat;
+
+  ChatDBA.saveChat(newResponse);
+
   //todo ch save response data.
-  //todo ch create response object.
-  return completion.choices[0].message.content;
+  //todo ch create response dto.
+  return response.output_text;
 }
 
 export const ChatBusinessLogic = {

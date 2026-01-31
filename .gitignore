@@ -4,3 +4,4 @@ dist/
 .env.*
 .env
 *.db
+sample_response.json

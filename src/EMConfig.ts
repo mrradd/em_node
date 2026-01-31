@@ -16,6 +16,5 @@ export function validateSettings() {
 
   if (!OPENAI_API_KEY || !DATABASE_NAME || !MODEL) {
     console.error("!!!MISSING VALUES!!!");
-    process.exitCode = 1;
   }
 }
