@@ -3,12 +3,22 @@ import { Chat } from "../models/Chat";
 import { MODEL, OPENAI_API_KEY } from "../EMConfig";
 import { ChatRequestDTO } from "../DTOs/ChatRequestDTO";
 import { ChatDBA } from "../DBAs/ChatDBA";
+import { LlmDataDBA } from "../DBAs/LlmDataDBA";
+import { ChatResponseDTO } from "../DTOs/ChatResponseDTO";
 
 const openaiClient = new OpenAI({
   apiKey: OPENAI_API_KEY
 });
 
-async function sendChatRequest({ message, threadId }: ChatRequestDTO): Promise<string | null> {
+/**
+ * Sends a chat request to the OpenAI Responses API using prior thread context,
+ * persists the user and assistant messages, records usage metrics, and returns
+ * the saved assistant message as a ChatResponseDTO.
+ * @param message - User message to send to the LLM.
+ * @param threadId - Chat Thread ID this chat is part of.
+ * @returns ChatResponseDTO object with the last assistant message.
+ */
+async function sendChatRequest({ message, threadId }: ChatRequestDTO): Promise<ChatResponseDTO> {
   const chats: Chat[] | null = ChatDBA.getChatsInThread(threadId);
 
   //Get all the previous chats in the thread to send in the request.
@@ -42,11 +52,22 @@ async function sendChatRequest({ message, threadId }: ChatRequestDTO): Promise<s
     role: "assistant",
   } as Chat;
 
-  ChatDBA.saveChat(newResponse);
+  const resultResponse = ChatDBA.saveChat(newResponse);
 
-  //todo ch save response data.
-  //todo ch create response dto.
-  return response.output_text;
+  LlmDataDBA.createData(
+    response.model,
+    response.usage?.input_tokens ?? 0,
+    response.usage?.output_tokens ?? 0,
+    response.usage?.output_tokens_details.reasoning_tokens ?? 0,
+    response.usage?.total_tokens ?? 0);
+
+  return {
+    id: resultResponse.id,
+    threadId: resultResponse.thread_id,
+    message: resultResponse.message,
+    createdTimestamp: resultResponse.created_timestamp,
+    role: resultResponse.role,
+  } as ChatResponseDTO;
 }
 
 export const ChatBusinessLogic = {

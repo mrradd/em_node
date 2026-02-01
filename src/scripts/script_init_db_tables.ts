@@ -1,6 +1,12 @@
 import dotenv from "dotenv";
 import Database from "better-sqlite3"
+
 dotenv.config();
+
+if (!process.env.DATABASE_NAME) {
+  console.error("No DATABASE_NAME set!");
+  process.exit();
+}
 
 const TheDb = new Database(process.env.DATABASE_NAME);
 
@@ -23,7 +29,7 @@ function init() {
       name TEXT NOT NULL,
       created_timestamp INTEGER NOT NULL);`);
 
-    const createChatsDatas = TheDb.prepare(`CREATE TABLE IF NOT EXISTS chat_datas (
+    const createChatsDatas = TheDb.prepare(`CREATE TABLE IF NOT EXISTS llm_datas (
       id TEXT PRIMARY KEY NOT NULL,
       model TEXT NOT NULL,
       input_tokens INTEGER NOT NULL,
@@ -45,7 +51,7 @@ function init() {
       console.log("Creating chats table");
       createChats.run();
 
-      console.log("Creating chat_datas table");
+      console.log("Creating llm_datas table");
       createChatsDatas.run();
 
       console.log("Creating migrations table");
