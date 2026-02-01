@@ -21,6 +21,12 @@ VALUES(@id , @name, @created_timestamp);`);
   return newThread;
 }
 
+function getAllChatThreadsLite() {
+  const selectStmt = TheDb.prepare(`SELECT id, name, created_timestamp FROM chat_threads;`);
+  return selectStmt.all();
+}
+
 export const ChatThreadDBA = {
-  createChatThread
+  createChatThread,
+  getAllChatThreadsLite
 };

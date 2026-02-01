@@ -32,7 +32,7 @@ chatRouter.patch("/thread/update", async (req, res) => {
 //api/v1/chat/thread/all
 //Returns all ChatThreads.
 chatRouter.get("/thread/all", async (req, res) => {
-
+  res.json({ data: ChatThreadBusinessLogic.getAllChatThreadsLite() });
 });
 
 //GET

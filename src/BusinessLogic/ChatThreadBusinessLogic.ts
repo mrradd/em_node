@@ -3,10 +3,10 @@ import { ChatThreadLiteDTO } from "../DTOs/ChatThreadLiteDTO";
 import { ChatThreadDBA } from "../DBAs/ChatThreadDBA";
 import { CreateChatThreadRequestDTO } from "../DTOs/CreateChatThreadRequestDTO";
 
-export function createNewChatThread({ threadName }: CreateChatThreadRequestDTO): ChatThreadLiteDTO {
+function createNewChatThread({ threadName }: CreateChatThreadRequestDTO): ChatThreadLiteDTO {
   const resp: ChatThread | null = ChatThreadDBA.createChatThread(threadName);
 
-  if(!resp) {
+  if (!resp) {
     throw new Error("createNewChatThread: An error occured creating the ChatThread");
   }
 
@@ -17,6 +17,11 @@ export function createNewChatThread({ threadName }: CreateChatThreadRequestDTO):
   } as ChatThreadLiteDTO
 }
 
+function getAllChatThreadsLite() {
+  return ChatThreadDBA.getAllChatThreadsLite();
+}
+
 export const ChatThreadBusinessLogic = {
   createNewChatThread,
+  getAllChatThreadsLite,
 };
