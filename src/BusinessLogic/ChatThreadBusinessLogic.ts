@@ -25,6 +25,10 @@ export class ChatThreadBusinessLogic {
     } as ChatThreadDTO
   }
 
+  static deleteChatThread(id: string) {
+    ChatThreadDBA.deleteChatThread(id);
+  }
+
   static getAllChatThreads(): GetAllChatThreadsResponseDTO {
     const threads: ChatThreadDTO[] = ChatThreadDBA.getAllChatThreads().map((chatThread) => {
       return {

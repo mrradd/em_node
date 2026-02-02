@@ -2,6 +2,15 @@ import { Chat } from "../models/Chat";
 import { TheDb } from "../Server";
 
 export class ChatDBA {
+  static deleteChatByThreadId(threadId: string) {
+    const deleteStmt = TheDb.prepare(`DELETE FROM chats WHERE thread_id = @threadId;`);
+    const txn = TheDb.transaction((threadId: string) => {
+      deleteStmt.run({ threadId: threadId });
+    });
+
+    txn(threadId);
+  }
+
   static getChatsInThread(threadId: string): Chat[] | null {
     const selectStmt = TheDb.prepare(`
   SELECT c.id, c.thread_id, c.role, c.message, c.created_timestamp

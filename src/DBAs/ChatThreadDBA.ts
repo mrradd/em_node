@@ -6,8 +6,8 @@ export class ChatThreadDBA {
 
   static createChatThread(threadName: string): ChatThread | null {
     const insertStmt = TheDb.prepare(`
-  INSERT INTO chat_threads (id, name, created_timestamp)
-  VALUES(@id , @name, @created_timestamp);`);
+INSERT INTO chat_threads (id, name, created_timestamp)
+VALUES (@id , @name, @created_timestamp);`);
 
     const newThread: ChatThread = {
       id: crypto.randomUUID(),
@@ -24,12 +24,39 @@ export class ChatThreadDBA {
     return newThread;
   }
 
+  static deleteChatThread(id: string) {
+    const threadDeleteStmt = TheDb.prepare(`DELETE FROM chat_threads WHERE id = @id`);
+    const chatDeleteStmt = TheDb.prepare(`DELETE FROM chats WHERE thread_id = @threadId;`);
+
+    const txn = TheDb.transaction((id: string) => {
+      chatDeleteStmt.run({ threadId: id });
+      threadDeleteStmt.run({ id: id });
+    });
+
+    txn(id);
+  }
+
+  static getAllChatThreads(): ChatThread[] {
+    const selectStmt = TheDb.prepare(`SELECT id, name, created_timestamp FROM chat_threads;`);
+    const res = selectStmt.all()
+    return res;
+  }
+
+  static getChatThreadById(id: string): ChatThread {
+    const selectStmt = TheDb.prepare(`
+SELECT id, name, created_timestamp
+  FROM chat_threads
+ WHERE id = @id;`);
+
+    return selectStmt.get({ id: id });
+  }
+
   /** @returns an object only containing changed values. */
   static updateChatThread({ id, newThreadName }: UpdateChatThreadRequestDTO): Partial<ChatThread> {
     const updateNameStmt = TheDb.prepare(`
-  UPDATE chat_threads
-    SET name = @name
-  WHERE id = @id;`);
+UPDATE chat_threads
+  SET name = @name
+WHERE id = @id;`);
 
     const newThread: Partial<ChatThread> = {
       id: id,
@@ -45,20 +72,5 @@ export class ChatThreadDBA {
     txn(newThread);
 
     return newThread;
-  }
-
-  static getAllChatThreads(): ChatThread[] {
-    const selectStmt = TheDb.prepare(`SELECT id, name, created_timestamp FROM chat_threads;`);
-    const res = selectStmt.all()
-    return res;
-  }
-
-  static getChatThreadById(id: string): ChatThread {
-    const selectStmt = TheDb.prepare(`
-  SELECT id, name, created_timestamp
-    FROM chat_threads
-  WHERE id = @id;`);
-
-    return selectStmt.get({ id: id });
   }
 }
