@@ -25,21 +25,21 @@ chatRouter.post("/thread/create", (req, res) => {
 //api/v1/chat/thread/update
 //Updates an existing ChatThread with the passed in information.
 chatRouter.patch("/thread/update", async (req, res) => {
-
+  res.json({ data: ChatThreadBusinessLogic.updateChatThread(req.body) })
 });
 
 //GET
 //api/v1/chat/thread/all
 //Returns all ChatThreads.
 chatRouter.get("/thread/all", async (req, res) => {
-  res.json({ data: ChatThreadBusinessLogic.getAllChatThreadsLite() });
+  res.json({ data: ChatThreadBusinessLogic.getAllChatThreads() });
 });
 
 //GET
-//api/v1/chat/thread/:id
+//api/v1/chat/thread/:id/detail
 //Gets all information for a ChatThread including all of its Chats.
-chatRouter.get("/thread/:id", async (req, res) => {
-
+chatRouter.get("/thread/:id/detail", async (req, res) => {
+  res.json({ data: ChatThreadBusinessLogic.getChatThreadDetails(req.params.id) })
 });
 
 //DELETE

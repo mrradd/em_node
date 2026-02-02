@@ -1,3 +1,4 @@
+import { UpdateChatThreadRequestDTO } from "../DTOs/UpdateChatThreadRequestDTO";
 import { ChatThread } from "../models/ChatThread";
 import { TheDb } from "../Server";
 
@@ -21,12 +22,47 @@ VALUES(@id , @name, @created_timestamp);`);
   return newThread;
 }
 
-function getAllChatThreadsLite() {
+/** @returns an object only containing changed values. */
+function updateChatThread({ id, newThreadName }: UpdateChatThreadRequestDTO): Partial<ChatThread> {
+  const updateNameStmt = TheDb.prepare(`
+UPDATE chat_threads
+   SET name = @name
+ WHERE id = @id;`);
+
+  const newThread: Partial<ChatThread> = {
+    id: id,
+    name: newThreadName,
+  };
+
+  const txn = TheDb.transaction((theThread: ChatThread) => {
+    if (newThread.name) {
+      updateNameStmt.run(theThread);
+    }
+  });
+
+  txn(newThread);
+
+  return newThread;
+}
+
+function getAllChatThreads(): ChatThread[] {
   const selectStmt = TheDb.prepare(`SELECT id, name, created_timestamp FROM chat_threads;`);
-  return selectStmt.all();
+  const res = selectStmt.all()
+  return res;
+}
+
+function getChatThreadById(id: string): ChatThread {
+  const selectStmt = TheDb.prepare(`
+SELECT id, name, created_timestamp
+  FROM chat_threads
+ WHERE id = @id;`);
+
+  return selectStmt.get({ id: id });
 }
 
 export const ChatThreadDBA = {
   createChatThread,
-  getAllChatThreadsLite
+  getAllChatThreads,
+  updateChatThread,
+  getChatThreadById,
 };
