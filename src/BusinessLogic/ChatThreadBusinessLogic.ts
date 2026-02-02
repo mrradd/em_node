@@ -10,73 +10,68 @@ import { Chat } from "../models/Chat";
 import { ChatThreadDetailDTO } from "../DTOs/ChatThreadDetailDTO";
 import { ChatDTO } from "../DTOs/ChatDTO";
 
-function createNewChatThread({ threadName }: CreateChatThreadRequestDTO): ChatThreadDTO {
-  const resp: ChatThread | null = ChatThreadDBA.createChatThread(threadName);
+export class ChatThreadBusinessLogic {
+  static createNewChatThread({ threadName }: CreateChatThreadRequestDTO): ChatThreadDTO {
+    const resp: ChatThread | null = ChatThreadDBA.createChatThread(threadName);
 
-  if (!resp) {
-    throw new Error("createNewChatThread: An error occured creating the ChatThread");
-  }
+    if (!resp) {
+      throw new Error("createNewChatThread: An error occured creating the ChatThread");
+    }
 
-  return {
-    id: resp.id,
-    name: resp.name,
-    created_timestamp: resp.created_timestamp,
-  } as ChatThreadDTO
-}
-
-function getAllChatThreads(): GetAllChatThreadsResponseDTO {
-  const threads: ChatThreadDTO[] = ChatThreadDBA.getAllChatThreads().map((chatThread) => {
     return {
-      id: chatThread.id,
-      name: chatThread.name,
-      created_timestamp: chatThread.created_timestamp,
-    } as ChatThreadDTO;
-  });
-
-  const dto: GetAllChatThreadsResponseDTO = {
-    chatThreads: threads,
+      id: resp.id,
+      name: resp.name,
+      created_timestamp: resp.created_timestamp,
+    } as ChatThreadDTO
   }
 
-  return dto;
-}
+  static getAllChatThreads(): GetAllChatThreadsResponseDTO {
+    const threads: ChatThreadDTO[] = ChatThreadDBA.getAllChatThreads().map((chatThread) => {
+      return {
+        id: chatThread.id,
+        name: chatThread.name,
+        created_timestamp: chatThread.created_timestamp,
+      } as ChatThreadDTO;
+    });
 
-function getChatThreadDetails(threadId: string) {
-  const thread: ChatThread = ChatThreadDBA.getChatThreadById(threadId);
-  const chats: Chat[] | null = ChatDBA.getChatsInThread(threadId);
-  const chatDtos = chats?.map((chat) => {
+    const dto: GetAllChatThreadsResponseDTO = {
+      chatThreads: threads,
+    }
+
+    return dto;
+  }
+
+  static getChatThreadDetails(threadId: string) {
+    const thread: ChatThread = ChatThreadDBA.getChatThreadById(threadId);
+    const chats: Chat[] | null = ChatDBA.getChatsInThread(threadId);
+    const chatDtos = chats?.map((chat) => {
+      return {
+        id: chat.id,
+        threadId: chat.thread_id,
+        role: chat.role,
+        message: chat.message,
+        createdTimestamp: chat.created_timestamp,
+      } as ChatDTO
+    });
+    console.log(thread);
     return {
-      id: chat.id,
-      threadId: chat.thread_id,
-      role: chat.role,
-      message: chat.message,
-      createdTimestamp: chat.created_timestamp,
-    } as ChatDTO
-  });
-  console.log(thread);
-  return {
-    id: thread.id,
-    name: thread.name,
-    created_timestamp: thread.created_timestamp,
-    chats: chatDtos,
-  } as ChatThreadDetailDTO
-}
-
-function updateChatThread(dto: UpdateChatThreadRequestDTO): UpdateChatThreadResponseDTO {
-  const resp: Partial<ChatThread> = ChatThreadDBA.updateChatThread(dto);
-
-  if (!resp) {
-    throw new Error("createNewChatThread: An error occured creating the ChatThread");
+      id: thread.id,
+      name: thread.name,
+      created_timestamp: thread.created_timestamp,
+      chats: chatDtos,
+    } as ChatThreadDetailDTO
   }
 
-  return {
-    id: resp.id,
-    name: resp.name,
-  } as UpdateChatThreadResponseDTO;
-}
+  static updateChatThread(dto: UpdateChatThreadRequestDTO): UpdateChatThreadResponseDTO {
+    const resp: Partial<ChatThread> = ChatThreadDBA.updateChatThread(dto);
 
-export const ChatThreadBusinessLogic = {
-  createNewChatThread,
-  getAllChatThreads,
-  getChatThreadDetails,
-  updateChatThread,
-};
+    if (!resp) {
+      throw new Error("createNewChatThread: An error occured creating the ChatThread");
+    }
+
+    return {
+      id: resp.id,
+      name: resp.name,
+    } as UpdateChatThreadResponseDTO;
+  }
+}
