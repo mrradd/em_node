@@ -55,8 +55,8 @@ SELECT id, name, created_timestamp
   static updateChatThread({ id, newThreadName }: UpdateChatThreadRequestDTO): Partial<ChatThread> {
     const updateNameStmt = TheDb.prepare(`
 UPDATE chat_threads
-  SET name = @name
-WHERE id = @id;`);
+   SET name = @name
+ WHERE id = @id;`);
 
     const newThread: Partial<ChatThread> = {
       id: id,
@@ -65,7 +65,7 @@ WHERE id = @id;`);
 
     const txn = TheDb.transaction((theThread: ChatThread) => {
       if (newThread.name) {
-        updateNameStmt.run(theThread);
+        updateNameStmt.run({ name: newThread.name });
       }
     });
 
