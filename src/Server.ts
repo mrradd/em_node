@@ -16,18 +16,18 @@ app.use(express.json());
 app.use("/api/v1/chat", chatRouter);
 
 app.get("/api/v1/heartbeat", (req, res) => {
-    res.json({ data: "42" });
+  res.json({ data: "42" });
 });
 
 // A general error handling middleware.
 app.use((err: any, req: any, res: any, next: any) => {
-    console.error(err.stack);
-    res.status(500).json({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Something went wrong on the server."
-    });
+  console.error(err.stack);
+  res.status(500).json({
+    code: "INTERNAL_SERVER_ERROR",
+    message: "Something went wrong on the server."
+  });
 });
 
 const server = app.listen(PORT, HOST, () => {
-    console.log(`\nServer is running on port http://${HOST}:${PORT}`);
+  console.log(`\nServer is running on port http://${HOST}:${PORT}`);
 });
