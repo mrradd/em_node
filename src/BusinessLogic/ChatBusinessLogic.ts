@@ -32,7 +32,10 @@ export class ChatBusinessLogic {
     });
 
     //Ensure the system prompt is at the beginning.
-    inputs.unshift({ role: "system", content: "You will return all responses in structured Markdown." });
+    inputs.unshift({
+      role: "system",
+      content: "<Instructions>You will return all responses in structured Markdown.</Instructions>"
+    });
 
     //Add the new message to the end of the input list.
     inputs.push({ role: "user", content: message });
