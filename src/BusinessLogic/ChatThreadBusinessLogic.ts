@@ -21,7 +21,7 @@ export class ChatThreadBusinessLogic {
     return {
       id: resp.id,
       name: resp.name,
-      created_timestamp: resp.created_timestamp,
+      createdTimestamp: resp.created_timestamp,
     } as ChatThreadDTO
   }
 
@@ -34,7 +34,7 @@ export class ChatThreadBusinessLogic {
       return {
         id: chatThread.id,
         name: chatThread.name,
-        created_timestamp: chatThread.created_timestamp,
+        createdTimestamp: chatThread.created_timestamp,
       } as ChatThreadDTO;
     });
 
@@ -61,7 +61,7 @@ export class ChatThreadBusinessLogic {
     return {
       id: thread.id,
       name: thread.name,
-      created_timestamp: thread.created_timestamp,
+      createdTimestamp: thread.created_timestamp,
       chats: chatDtos,
     } as ChatThreadDetailDTO
   }
