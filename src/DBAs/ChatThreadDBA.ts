@@ -64,8 +64,8 @@ UPDATE chat_threads
     };
 
     const txn = TheDb.transaction((theThread: ChatThread) => {
-      if (newThread.name) {
-        updateNameStmt.run({ name: newThread.name });
+      if (theThread.name) {
+        updateNameStmt.run({ id: theThread.id, name: theThread.name });
       }
     });
 
