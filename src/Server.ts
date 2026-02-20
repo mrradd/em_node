@@ -29,5 +29,5 @@ app.use((err: any, req: any, res: any, next: any) => {
 });
 
 const server = app.listen(PORT, HOST, () => {
-  console.log(`\nServer is running on port http://${HOST}:${PORT}`);
+  console.log(`\nServer is running at http://${HOST}:${PORT}`);
 });

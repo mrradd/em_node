@@ -57,7 +57,7 @@ export class ChatThreadBusinessLogic {
         createdTimestamp: chat.created_timestamp,
       } as ChatDTO
     });
-    console.log(thread);
+
     return {
       id: thread.id,
       name: thread.name,
