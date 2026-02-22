@@ -70,7 +70,7 @@ export class ChatThreadBusinessLogic {
     const resp: Partial<ChatThread> = ChatThreadDBA.updateChatThread(dto);
 
     if (!resp) {
-      throw new Error("createNewChatThread: An error occured creating the ChatThread");
+      throw new Error("updateChatThread: An error occured creating the ChatThread");
     }
 
     return {
