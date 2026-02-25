@@ -17,9 +17,10 @@ export class ChatBusinessLogic {
    * the saved assistant message as a ChatResponseDTO.
    * @param message - User message to send to the LLM.
    * @param threadId - Chat Thread ID this chat is part of.
+   * @param model - LLM model to chat with.
    * @returns ChatResponseDTO object with the last assistant message.
    */
-  static async sendChatRequest({ message, threadId }: ChatRequestDTO): Promise<ChatResponseDTO> {
+  static async sendChatRequest({ message, threadId, model }: ChatRequestDTO): Promise<ChatResponseDTO> {
     const chats: Chat[] | null = ChatDBA.getChatsInThread(threadId);
 
     //Get all the previous chats in the thread to send in the request.
@@ -41,7 +42,7 @@ export class ChatBusinessLogic {
     inputs.push({ role: "user", content: message });
 
     const response = await openaiClient.responses.create({
-      model: MODEL,
+      model: model,
       input: inputs,
     });
 
@@ -60,6 +61,8 @@ export class ChatBusinessLogic {
     } as Chat;
 
     const resultResponse = ChatDBA.saveChat(newResponse);
+
+    console.log(`response model: '${response.model}' | model param: '${model}'`);
 
     LlmDataDBA.createData(
       response.model,

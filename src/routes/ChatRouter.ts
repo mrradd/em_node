@@ -46,3 +46,19 @@ chatRouter.delete("/thread/:id", async (req, res) => {
   ChatThreadBusinessLogic.deleteChatThread(req.params.id);
   res.sendStatus(200);
 });
+
+//GET
+//api/v1/chat/model/list
+//Returns a list of compatible LLMs to use while chatting.
+chatRouter.get("/model/list", async (req, res) => {
+  res.json({
+    data: {
+      models: [
+        "gpt-5-nano-2025-08-07",
+        "gpt-5-mini-2025-08-07",
+        "gpt-5-2025-08-07",
+        "gpt-5.2-2025-12-11",
+      ]
+    }
+  })
+});
