@@ -1,6 +1,7 @@
-export type ChatThread = {
+export type Meatball = {
   id: string, //uuid
-  meatball_id?: string, //uuid
   name: string,
+  description: string,
+  instructions: string,
   created_timestamp: number, //in ms.
-};
+}
