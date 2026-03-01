@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import { Chat } from "../models/Chat";
-import { MODEL, OPENAI_API_KEY } from "../EMConfig";
+import { OPENAI_API_KEY } from "../EMConfig";
 import { ChatRequestDTO } from "../DTOs/ChatRequestDTO";
 import { ChatDBA } from "../DBAs/ChatDBA";
 import { LlmDataDBA } from "../DBAs/LlmDataDBA";
@@ -35,8 +35,10 @@ export class ChatBusinessLogic {
     //Ensure the system prompt is at the beginning.
     inputs.unshift({
       role: "system",
-      content: "<Instructions>You will return all responses in structured Markdown.</Instructions>"
-    });
+      content: `
+<Instructions>
+- You will return all responses in structured Markdown.
+</Instructions>`});
 
     //Add the new message to the end of the input list.
     inputs.push({ role: "user", content: message });
