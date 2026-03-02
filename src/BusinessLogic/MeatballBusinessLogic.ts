@@ -1,4 +1,6 @@
 import { MeatballDBA } from "../DBAs/MeatballDBA";
+import { CreateMeatballRequestDTO } from "../DTOs/Meatball/CreateMeatballRequestDTO";
+import { MeatballDTO } from "../DTOs/Meatball/MeatballDTO";
 import { Meatball } from "../models/Meatball";
 
 export class MeatballBusinessLogic {

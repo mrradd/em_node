@@ -1,4 +1,4 @@
-type MeatballDTO = {
+export type MeatballDTO = {
   id: string, //uuid
   name: string,
   description: string,

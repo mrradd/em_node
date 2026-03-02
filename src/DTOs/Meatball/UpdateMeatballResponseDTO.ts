@@ -1,4 +1,4 @@
-type UpdateMeatballResponseDTO = {
+export type UpdateMeatballResponseDTO = {
   id: string, //uuid
   name?: string,
   description?: string,
