@@ -1,14 +1,11 @@
 import OpenAI from "openai";
 import { Chat } from "../models/Chat";
 import { OPENAI_API_KEY } from "../EMConfig";
-import { ChatRequestDTO } from "../DTOs/ChatRequestDTO";
+import { ChatRequestDTO } from "../DTOs/Chat/ChatRequestDTO";
 import { ChatDBA } from "../DBAs/ChatDBA";
 import { LlmDataDBA } from "../DBAs/LlmDataDBA";
-import { ChatResponseDTO } from "../DTOs/ChatResponseDTO";
-
-const openaiClient = new OpenAI({
-  apiKey: OPENAI_API_KEY
-});
+import { ChatResponseDTO } from "../DTOs/Chat/ChatResponseDTO";
+import { openaiClient } from "../Server";
 
 export class ChatBusinessLogic {
   /**

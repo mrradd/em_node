@@ -1,0 +1,93 @@
+import { Meatball } from "../models/Meatball";
+import { TheDb } from "../Server";
+require("crypto");
+
+/**
+ * A meatball is a concept kind of like an AI assistant at the most basic level. It is similar
+ * in nature to Google's Gems or ChatGPT's custom GPTs. It accepts instructions that will always
+ * be included in the system content. There are future plans to allow for tuning attributes,
+ * providing files for it to read and access, as well as maintaining memory.
+ */
+export class MeatballDBA {
+  static createMeatball(name: string, instructions: string, description: string): Meatball {
+    const insertStmt = TheDb.prepare(`
+INSERT INTO meatballs (id, name, description, instructions, created_timestamp)
+VALUES(@id, @name, @description, @instructions, @created_timestamp);`);
+
+    const newMeatball: Meatball = {
+      id: crypto.randomUUID(),
+      name: name,
+      description: description,
+      instructions: instructions,
+      created_timestamp: Date.now(),
+    };
+
+    const txn = TheDb.transaction((theThread: Meatball) => {
+      insertStmt.run(theThread);
+    });
+
+    txn(newMeatball);
+
+    return newMeatball;
+  }
+
+  static deleteMeatball(id: string) {
+    const deleteMeatballStmt = TheDb.prepare(`DELETE FROM meatballs WHERE id = @id;`);
+    const nullFkStmt = TheDb.prepare(`UPDATE chat_threads SET meatball_id = null WHERE meatball_id = @id;`);
+
+    const txn = TheDb.transaction((meatballId: string) => {
+      deleteMeatballStmt.run({ id: meatballId });
+      nullFkStmt.run({ id: meatballId });
+    });
+
+    txn(id);
+  }
+
+  static updateMeatball({ id, name, instructions, description }: Partial<Meatball>): Partial<Meatball> {
+    const updateNameStmt = TheDb.prepare(`
+UPDATE meatballs
+   SET name = @name
+ WHERE id = @id;`);
+    const updateDescriptionStmt = TheDb.prepare(`
+UPDATE meatballs
+   SET description = @description
+ WHERE id = @id;`);
+    const updateInstructionsStmt = TheDb.prepare(`
+UPDATE meatballs
+   SET instructions = @instructions
+ WHERE id = @id;`);
+
+    const editedMeatball: Partial<Meatball> = {
+      id: id,
+      name: name,
+      instructions: instructions,
+      description: description,
+    };
+
+    const txn = TheDb.transaction((meatball: Meatball) => {
+      if (meatball.name) {
+        updateNameStmt.run({ id: meatball.id, name: meatball.name });
+      }
+      if (meatball.description) {
+        updateDescriptionStmt.run({ id: meatball.id, description: meatball.description })
+      }
+      if (meatball.instructions) {
+        updateInstructionsStmt.run({ id: meatball.id, instructions: meatball.instructions });
+      }
+    });
+
+    txn(editedMeatball);
+
+    return editedMeatball;
+  }
+
+  static getMeatballById(id: string): Meatball | null {
+    const selectStmt = TheDb.prepare(`SELECT * FROM meatballs WHERE id = @id;`);
+    return selectStmt.get({ id: id });
+  }
+
+  static getMeatballs(): Meatball[] | null {
+    const selectStmt = TheDb.prepare(`SELECT * FROM meatballs;`);
+    return selectStmt.all();
+  }
+}

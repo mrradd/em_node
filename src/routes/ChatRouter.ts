@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { ChatBusinessLogic } from "../BusinessLogic/ChatBusinessLogic";
 import { ChatThreadBusinessLogic } from "../BusinessLogic/ChatThreadBusinessLogic";
-import { ChatRequestDTO } from "../DTOs/ChatRequestDTO";
-import { CreateChatThreadRequestDTO } from "../DTOs/CreateChatThreadRequestDTO";
-import { UpdateChatThreadRequestDTO } from "../DTOs/UpdateChatThreadRequestDTO";
+import { ChatRequestDTO } from "../DTOs/Chat/ChatRequestDTO";
+import { CreateChatThreadRequestDTO } from "../DTOs/ChatThread/CreateChatThreadRequestDTO";
+import { UpdateChatThreadRequestDTO } from "../DTOs/ChatThread/UpdateChatThreadRequestDTO";
 
 export const chatRouter = Router();
 

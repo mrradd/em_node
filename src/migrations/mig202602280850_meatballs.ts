@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS meatballs (
   name TEXT NOT NULL,
   description TEXT,
   instructions TEXT,
-  created_timestamp TEXT);
+  created_timestamp TEXT NOT NULL,
+  edited_timestamp TEXT);
   
 ALTER TABLE chat_threads ADD COLUMN meatball_id TEXT REFERENCES meatballs(id);
 `;

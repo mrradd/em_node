@@ -1,22 +1,18 @@
 import { ChatThread } from "../models/ChatThread";
-import { ChatThreadDTO } from "../DTOs/ChatThreadDTO";
+import { ChatThreadDTO } from "../DTOs/ChatThread/ChatThreadDTO";
 import { ChatThreadDBA } from "../DBAs/ChatThreadDBA";
-import { CreateChatThreadRequestDTO } from "../DTOs/CreateChatThreadRequestDTO";
-import { UpdateChatThreadRequestDTO } from "../DTOs/UpdateChatThreadRequestDTO";
-import { UpdateChatThreadResponseDTO } from "../DTOs/UpdateChatThreadResponseDTO";
-import { GetAllChatThreadsResponseDTO } from "../DTOs/GetAllChatThreadsResponseDTO";
+import { CreateChatThreadRequestDTO } from "../DTOs/ChatThread/CreateChatThreadRequestDTO";
+import { UpdateChatThreadRequestDTO } from "../DTOs/ChatThread/UpdateChatThreadRequestDTO";
+import { UpdateChatThreadResponseDTO } from "../DTOs/ChatThread/UpdateChatThreadResponseDTO";
+import { GetAllChatThreadsResponseDTO } from "../DTOs/ChatThread/GetAllChatThreadsResponseDTO";
 import { ChatDBA } from "../DBAs/ChatDBA";
 import { Chat } from "../models/Chat";
-import { ChatThreadDetailDTO } from "../DTOs/ChatThreadDetailDTO";
-import { ChatDTO } from "../DTOs/ChatDTO";
+import { ChatThreadDetailDTO } from "../DTOs/ChatThread/ChatThreadDetailDTO";
+import { ChatDTO } from "../DTOs/Chat/ChatDTO";
 
 export class ChatThreadBusinessLogic {
   static createNewChatThread({ threadName }: CreateChatThreadRequestDTO): ChatThreadDTO {
-    const resp: ChatThread | null = ChatThreadDBA.createChatThread(threadName);
-
-    if (!resp) {
-      throw new Error("createNewChatThread: An error occured creating the ChatThread");
-    }
+    const resp: ChatThread = ChatThreadDBA.createChatThread(threadName);
 
     return {
       id: resp.id,
@@ -68,10 +64,6 @@ export class ChatThreadBusinessLogic {
 
   static updateChatThread(dto: UpdateChatThreadRequestDTO): UpdateChatThreadResponseDTO {
     const resp: Partial<ChatThread> = ChatThreadDBA.updateChatThread(dto);
-
-    if (!resp) {
-      throw new Error("updateChatThread: An error occured creating the ChatThread");
-    }
 
     return {
       id: resp.id,

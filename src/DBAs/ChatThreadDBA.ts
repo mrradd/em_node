@@ -1,10 +1,11 @@
-import { UpdateChatThreadRequestDTO } from "../DTOs/UpdateChatThreadRequestDTO";
+import { UpdateChatThreadRequestDTO } from "../DTOs/ChatThread/UpdateChatThreadRequestDTO";
 import { ChatThread } from "../models/ChatThread";
 import { TheDb } from "../Server";
+require("crypto");
 
 export class ChatThreadDBA {
 
-  static createChatThread(threadName: string): ChatThread | null {
+  static createChatThread(threadName: string): ChatThread {
     const insertStmt = TheDb.prepare(`
 INSERT INTO chat_threads (id, name, created_timestamp)
 VALUES (@id , @name, @created_timestamp);`);
@@ -58,7 +59,7 @@ UPDATE chat_threads
    SET name = @name
  WHERE id = @id;`);
 
-    const newThread: Partial<ChatThread> = {
+    const editedThread: Partial<ChatThread> = {
       id: id,
       name: newThreadName,
     };
@@ -69,8 +70,8 @@ UPDATE chat_threads
       }
     });
 
-    txn(newThread);
+    txn(editedThread);
 
-    return newThread;
+    return editedThread;
   }
 }

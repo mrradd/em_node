@@ -1,4 +1,4 @@
-import { ChatDTO } from "./ChatDTO"
+import { ChatDTO } from "./Chat/ChatDTO"
 
 export type ChatThreadDetailDTO = {
   id: string, //uuid

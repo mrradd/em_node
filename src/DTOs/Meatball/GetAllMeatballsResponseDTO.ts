@@ -1,0 +1,3 @@
+type GetAllMeatballsResponseDTO = {
+  meatballs: MeatballDTO[],
+}

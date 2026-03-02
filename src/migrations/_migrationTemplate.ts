@@ -3,11 +3,11 @@ import { sha256 } from "../utils/Hash";
 const id = "YYYYMMDDHHMM_name";
 
 const up = `
-sql sql sql
+do stuff sql;
 `;
 
 const down = `
-sql sql sql sql
+undo stuff sql;
 `;
 
 const checkSum = sha256(up + down);

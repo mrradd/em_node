@@ -4,4 +4,5 @@ export type Meatball = {
   description: string,
   instructions: string,
   created_timestamp: number, //in ms.
+  edited_timestamp?: number, //in ms.
 }
