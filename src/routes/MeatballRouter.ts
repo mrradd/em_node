@@ -33,7 +33,7 @@ meatballRouter.delete("/:id", (req, res) => {
 });
 
 //GET
-//api/v1/meatball/list
+//api/v1/meatball/:id
 //Gets a meatball by id.
 meatballRouter.get("/:id", (req, res) => {
   const result = MeatballBusinessLogic.getMeatballById(req.params.id);
@@ -49,7 +49,7 @@ meatballRouter.get("/:id", (req, res) => {
 //GET
 //api/v1/meatball/list
 //Gets all meatballs from the database.
-meatballRouter.get("/list", (req, res) => {
+meatballRouter.get("/list/all", (req, res) => {
   const result = MeatballBusinessLogic.getMeatballs();
 
   if (!result) {

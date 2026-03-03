@@ -39,11 +39,14 @@ VALUES(@id, @name, @description, @instructions, @created_timestamp);`);
 
   static deleteMeatball(id: string): boolean {
     const deleteStmt = TheDb.prepare(`
-DELETE FROM meatballs WHERE id = @id;
+DELETE FROM meatballs WHERE id = @id;`);
+
+    const deleteFkStmt = TheDb.prepare(`
 UPDATE chat_threads SET meatball_id = null WHERE meatball_id = @id;`);
 
     let info: Database.RunResult;
     const txn = TheDb.transaction((meatballId: string) => {
+      deleteFkStmt.run({ id: meatballId });
       info = deleteStmt.run({ id: meatballId });
     });
 

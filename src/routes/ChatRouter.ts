@@ -36,7 +36,6 @@ chatRouter.post("/thread/create", (req, res) => {
   res.json({ data: ChatThreadBusinessLogic.createNewChatThread(req.body as CreateChatThreadRequestDTO) });
 });
 
-
 //GET
 //api/v1/chat/thread/:id/detail
 //Gets all information for a ChatThread including all of its Chats.
