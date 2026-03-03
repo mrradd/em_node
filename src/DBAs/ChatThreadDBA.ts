@@ -3,8 +3,9 @@ import { ChatThread } from "../models/ChatThread";
 import { TheDb } from "../Server";
 require("crypto");
 
-export class ChatThreadDBA {
+//TODO CH. RETURN NULL IN BAD CASE FOR CONSISTENCY.
 
+export class ChatThreadDBA {
   static createChatThread(threadName: string): ChatThread {
     const insertStmt = TheDb.prepare(`
 INSERT INTO chat_threads (id, name, created_timestamp)
@@ -39,7 +40,7 @@ VALUES (@id , @name, @created_timestamp);`);
 
   static getAllChatThreads(): ChatThread[] {
     const selectStmt = TheDb.prepare(`SELECT id, name, created_timestamp FROM chat_threads;`);
-    const res = selectStmt.all()
+    const res = selectStmt.all() as ChatThread[];
     return res;
   }
 
@@ -49,7 +50,7 @@ SELECT id, name, created_timestamp
   FROM chat_threads
  WHERE id = @id;`);
 
-    return selectStmt.get({ id: id });
+    return selectStmt.get({ id: id }) as ChatThread;
   }
 
   /** @returns an object only containing changed values. */
@@ -64,7 +65,7 @@ UPDATE chat_threads
       name: newThreadName,
     };
 
-    const txn = TheDb.transaction((theThread: ChatThread) => {
+    const txn = TheDb.transaction((theThread: Partial<ChatThread>) => {
       if (theThread.name) {
         updateNameStmt.run({ id: theThread.id, name: theThread.name });
       }

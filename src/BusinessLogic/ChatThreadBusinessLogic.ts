@@ -55,9 +55,9 @@ export class ChatThreadBusinessLogic {
     });
 
     return {
-      id: thread.id,
-      name: thread.name,
-      createdTimestamp: thread.created_timestamp,
+      id: thread?.id,
+      name: thread?.name,
+      createdTimestamp: thread?.created_timestamp,
       chats: chatDtos,
     } as ChatThreadDetailDTO
   }

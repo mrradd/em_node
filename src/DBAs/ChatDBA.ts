@@ -11,13 +11,13 @@ export class ChatDBA {
     txn(threadId);
   }
 
-  static getChatsInThread(threadId: string): Chat[] | null {
+  static getChatsInThread(threadId: string): Chat[] {
     const selectStmt = TheDb.prepare(`
 SELECT c.id, c.thread_id, c.role, c.message, c.created_timestamp
   FROM chats c
 WHERE c.thread_id = ?`);
 
-    const result = selectStmt.all(threadId);
+    const result = selectStmt.all(threadId) as Chat[];
 
     return result;
   }
