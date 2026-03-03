@@ -1,19 +1,40 @@
 import { MeatballDBA } from "../DBAs/MeatballDBA";
 import { CreateMeatballRequestDTO } from "../DTOs/Meatball/CreateMeatballRequestDTO";
+import { GetAllMeatballsResponseDTO } from "../DTOs/Meatball/GetAllMeatballsResponseDTO";
 import { MeatballDTO } from "../DTOs/Meatball/MeatballDTO";
 import { Meatball } from "../models/Meatball";
 
 export class MeatballBusinessLogic {
-  static createMeatball(dto: CreateMeatballRequestDTO): MeatballDTO {
-    const resp: Meatball = MeatballDBA.createMeatball(dto.name, dto.instructions, dto.description);
 
+  static createMeatball(dto: CreateMeatballRequestDTO): MeatballDTO {
+    const res: Meatball = MeatballDBA.createMeatball(dto.name, dto.instructions, dto.description);
+    return this.toMeatballDTO(res);
+  }
+
+  static getMeatballs(): GetAllMeatballsResponseDTO | null {
+    const res: Meatball[] | null = MeatballDBA.getMeatballs();
+    
+    if(res) {
+      let dto = {} as GetAllMeatballsResponseDTO;
+      dto.meatballs = res.map((meatball) => {
+        return this.toMeatballDTO(meatball);
+      });
+      
+      return dto;
+    }
+    else {
+      return null;
+    }
+  }
+
+  static toMeatballDTO(meatball: Meatball): MeatballDTO {
     return {
-      id: resp.id,
-      name: resp.name,
-      description: resp.description,
-      instructions: resp.instructions,
-      createdTimestamp: resp.created_timestamp,
-      editedTimestamp: resp.edited_timestamp,
+      id: meatball.id,
+      name: meatball.name,
+      description: meatball.description,
+      instructions: meatball.instructions,
+      createdTimestamp: meatball.created_timestamp,
+      editedTimestamp: meatball.edited_timestamp,
     } as MeatballDTO;
   }
 }

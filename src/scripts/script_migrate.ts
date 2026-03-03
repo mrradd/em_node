@@ -4,6 +4,8 @@ import { DATABASE_NAME } from "../EMConfig";
 import migrationsList from "../migrations/migrationList";
 import { ExecutableMigration } from "../models/ExecutableMigration";
 
+console.log("~Migrating assumes the database has been created.~");
+
 if (!DATABASE_NAME) {
   console.error("No DATABASE_NAME set!");
   process.exit(1);
