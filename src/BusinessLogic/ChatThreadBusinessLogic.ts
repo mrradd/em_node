@@ -10,6 +10,7 @@ import { Chat } from "../models/Chat";
 import { ChatThreadDetailDTO } from "../DTOs/ChatThread/ChatThreadDetailDTO";
 import { ChatDTO } from "../DTOs/Chat/ChatDTO";
 
+//TODO CH. RETURN NULLS FOR FAILURES.
 export class ChatThreadBusinessLogic {
   static createNewChatThread({ threadName }: CreateChatThreadRequestDTO): ChatThreadDTO {
     const resp: ChatThread = ChatThreadDBA.createChatThread(threadName);

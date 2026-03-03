@@ -2,6 +2,8 @@ import { MeatballDBA } from "../DBAs/MeatballDBA";
 import { CreateMeatballRequestDTO } from "../DTOs/Meatball/CreateMeatballRequestDTO";
 import { GetAllMeatballsResponseDTO } from "../DTOs/Meatball/GetAllMeatballsResponseDTO";
 import { MeatballDTO } from "../DTOs/Meatball/MeatballDTO";
+import { UpdateMeatballRequestDTO } from "../DTOs/Meatball/UpdateMeatballRequestDTO";
+import { UpdateMeatballResponseDTO } from "../DTOs/Meatball/UpdateMeatballResponseDTO";
 import { Meatball } from "../models/Meatball";
 
 export class MeatballBusinessLogic {
@@ -39,6 +41,30 @@ export class MeatballBusinessLogic {
       dto.meatballs = res.map((meatball) => {
         return this.toMeatballDTO(meatball);
       });
+    }
+
+    return dto;
+  }
+
+  static updateMeatball({ id, name, instructions, description }: UpdateMeatballRequestDTO): UpdateMeatballResponseDTO | null {
+    const newMeatballData: Partial<Meatball> = {
+      id: id,
+      name: name,
+      description: description,
+      instructions: instructions,
+    };
+
+    const res: Partial<Meatball> | null = MeatballDBA.updateMeatball(newMeatballData);
+
+    if (!res) {
+      return null;
+    }
+
+    const dto: UpdateMeatballResponseDTO = {
+      id: res.id!,
+      name: res.name || undefined,
+      description: res.description || undefined,
+      instructions: res.instructions || undefined,
     }
 
     return dto;

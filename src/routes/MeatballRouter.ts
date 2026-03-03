@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { MeatballBusinessLogic } from "../BusinessLogic/MeatballBusinessLogic";
 import { CreateMeatballRequestDTO } from "../DTOs/Meatball/CreateMeatballRequestDTO";
+import { UpdateMeatballRequestDTO } from "../DTOs/Meatball/UpdateMeatballRequestDTO";
 
 export const meatballRouter = Router();
 
@@ -55,6 +56,19 @@ meatballRouter.get("/list/all", (req, res) => {
   if (!result) {
     res.status(404).json({ message: "Meatballs not found." });
     return;
+  }
+
+  res.json({ data: result });
+});
+
+//PATCH
+//api/v1/meatball/:id
+//Updated the meatball with the given id.
+meatballRouter.patch("/update", (req, res) => {
+  const result = MeatballBusinessLogic.updateMeatball(req.body as UpdateMeatballRequestDTO);
+
+  if (!result) {
+    res.status(404).json({ message: "Meatball not updated. " });
   }
 
   res.json({ data: result });

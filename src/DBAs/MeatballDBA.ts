@@ -55,7 +55,7 @@ UPDATE chat_threads SET meatball_id = null WHERE meatball_id = @id;`);
     return info!.changes === 1
   }
 
-  static updateMeatball({ id, name, instructions, description }: Partial<Meatball>): Partial<Meatball> {
+  static updateMeatball({ id, name, instructions, description }: Partial<Meatball>): Partial<Meatball> | null {
     const updateNameStmt = TheDb.prepare(`
 UPDATE meatballs
    SET name = @name
@@ -76,21 +76,22 @@ UPDATE meatballs
       description: description,
     };
 
+    let rowsChanged: number = 0;
     const txn = TheDb.transaction((meatball: Partial<Meatball>) => {
       if (meatball.name) {
-        updateNameStmt.run({ id: meatball.id, name: meatball.name });
+        rowsChanged += updateNameStmt.run({ id: meatball.id, name: meatball.name }).changes;
       }
       if (meatball.description) {
-        updateDescriptionStmt.run({ id: meatball.id, description: meatball.description })
+        rowsChanged += updateDescriptionStmt.run({ id: meatball.id, description: meatball.description }).changes
       }
       if (meatball.instructions) {
-        updateInstructionsStmt.run({ id: meatball.id, instructions: meatball.instructions });
+        rowsChanged += updateInstructionsStmt.run({ id: meatball.id, instructions: meatball.instructions }).changes;
       }
     });
 
     txn(editedMeatball);
 
-    return editedMeatball;
+    return rowsChanged > 0 ? editedMeatball : null;
   }
 
   static getMeatballById(id: string): Meatball | null {

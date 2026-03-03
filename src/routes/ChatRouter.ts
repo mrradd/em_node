@@ -6,6 +6,7 @@ import { CreateChatThreadRequestDTO } from "../DTOs/ChatThread/CreateChatThreadR
 import { UpdateChatThreadRequestDTO } from "../DTOs/ChatThread/UpdateChatThreadRequestDTO";
 
 export const chatRouter = Router();
+//TODO CH. HANDLE NULLS WITH A BAD RESPONSE.
 
 //POST
 //api/v1/chat/send
