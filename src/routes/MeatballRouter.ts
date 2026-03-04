@@ -12,7 +12,7 @@ meatballRouter.post("/create", (req, res) => {
   const result = MeatballBusinessLogic.createMeatball(req.body as CreateMeatballRequestDTO);
 
   if (!result) {
-    res.status(404).json({ message: "Meatball not created." });
+    res.status(404).json({ errorMessage: "Meatball not created." });
     return;
   }
 
@@ -26,7 +26,7 @@ meatballRouter.delete("/:id", (req, res) => {
   const result: boolean = MeatballBusinessLogic.deleteMeatballById(req.params.id);
 
   if (!result) {
-    res.status(404).json({ message: "Meatball not found or deleted." });
+    res.status(404).json({ errorMessage: "Meatball not found or deleted." });
     return;
   }
 
@@ -40,7 +40,7 @@ meatballRouter.get("/:id", (req, res) => {
   const result = MeatballBusinessLogic.getMeatballById(req.params.id);
 
   if (!result) {
-    res.status(404).json({ message: "Meatball not found." });
+    res.status(404).json({ errorMessage: "Meatball not found." });
     return;
   }
 
@@ -54,7 +54,7 @@ meatballRouter.get("/list/all", (req, res) => {
   const result = MeatballBusinessLogic.getMeatballs();
 
   if (!result) {
-    res.status(404).json({ message: "Meatballs not found." });
+    res.status(404).json({ errorMessage: "Meatballs not found." });
     return;
   }
 
@@ -68,7 +68,7 @@ meatballRouter.patch("/update", (req, res) => {
   const result = MeatballBusinessLogic.updateMeatball(req.body as UpdateMeatballRequestDTO);
 
   if (!result) {
-    res.status(404).json({ message: "Meatball not updated. " });
+    res.status(404).json({ errorMessage: "Meatball not updated." });
   }
 
   res.json({ data: result });
