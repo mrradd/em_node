@@ -1,4 +1,4 @@
-import { sha256 } from "../utils/Hash";
+import { generateChecksum } from "../models/ExecutableMigration";
 
 const id = "YYYYMMDDHHMM_name";
 
@@ -10,13 +10,11 @@ const down = `
 undo stuff sql;
 `;
 
-const checkSum = sha256(up + down);
-
 const migYYYYMMDDHHMM_name = {
   id: id,
   up: up,
   down: down,
-  checkSum: checkSum
+  checkSum: generateChecksum(up, down),
 };
 
 export default migYYYYMMDDHHMM_name;

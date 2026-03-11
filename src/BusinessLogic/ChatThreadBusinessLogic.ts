@@ -32,6 +32,7 @@ export class ChatThreadBusinessLogic {
         id: chatThread.id,
         name: chatThread.name,
         createdTimestamp: chatThread.created_timestamp,
+        meatballId: chatThread.meatball_id,
       } as ChatThreadDTO;
     });
 
@@ -59,6 +60,7 @@ export class ChatThreadBusinessLogic {
       id: thread?.id,
       name: thread?.name,
       createdTimestamp: thread?.created_timestamp,
+      meatballId: thread?.meatball_id,
       chats: chatDtos,
     } as ChatThreadDetailDTO
   }
@@ -69,6 +71,7 @@ export class ChatThreadBusinessLogic {
     return {
       id: resp.id,
       name: resp.name,
+      meatballId: resp.meatball_id,
     } as UpdateChatThreadResponseDTO;
   }
 }

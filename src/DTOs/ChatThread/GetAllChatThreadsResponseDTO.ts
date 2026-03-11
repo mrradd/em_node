@@ -1,4 +1,4 @@
-import { ChatThreadDTO } from "./ChatThread/ChatThreadDTO"
+import { ChatThreadDTO } from "../ChatThread/ChatThreadDTO"
 
 export type GetAllChatThreadsResponseDTO = {
   chatThreads: ChatThreadDTO[]

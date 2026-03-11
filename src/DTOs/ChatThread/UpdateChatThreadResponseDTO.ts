@@ -1,4 +1,5 @@
 export type UpdateChatThreadResponseDTO = {
   id: string, //uuid
-  newThreadName?: string,
+  meatballId?: string, //uuid
+  name?: string,
 };

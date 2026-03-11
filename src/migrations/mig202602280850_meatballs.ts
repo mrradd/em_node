@@ -1,5 +1,4 @@
-import { ExecutableMigration } from "../models/ExecutableMigration";
-import { sha256 } from "../utils/Hash";
+import { ExecutableMigration, generateChecksum } from "../models/ExecutableMigration";
 
 const id = "202602280850_meatballs";
 
@@ -21,13 +20,11 @@ ALTER TABLE chat_threads DROP COLUMN meatball_id;
 DROP TABLE IF EXISTS meatballs;
 `;
 
-const checkSum = sha256(up + down);
-
 const mig202602280850_meatballs: ExecutableMigration = {
   id: id,
   up: up,
   down: down,
-  checkSum: checkSum
+  checkSum: generateChecksum(up, down),
 };
 
 export default mig202602280850_meatballs;
