@@ -100,7 +100,7 @@ UPDATE meatballs
   }
 
   static getMeatballs(): Meatball[] | null {
-    const selectStmt = TheDb.prepare(`SELECT * FROM meatballs;`);
+    const selectStmt = TheDb.prepare(`SELECT id, name FROM meatballs;`);
     return selectStmt.all() as Meatball[] | null;
   }
 }
