@@ -56,17 +56,9 @@ UPDATE chat_threads SET meatball_id = null WHERE meatball_id = @id;`);
   }
 
   static updateMeatball({ id, name, instructions, description }: Partial<Meatball>): Partial<Meatball> | null {
-    const updateNameStmt = TheDb.prepare(`
+    const updateStmt = TheDb.prepare(`
 UPDATE meatballs
-   SET name = @name
- WHERE id = @id;`);
-    const updateDescriptionStmt = TheDb.prepare(`
-UPDATE meatballs
-   SET description = @description
- WHERE id = @id;`);
-    const updateInstructionsStmt = TheDb.prepare(`
-UPDATE meatballs
-   SET instructions = @instructions
+   SET name = @name, description = @description, instructions = @instructions
  WHERE id = @id;`);
 
     const editedMeatball: Partial<Meatball> = {
@@ -78,15 +70,12 @@ UPDATE meatballs
 
     let rowsChanged: number = 0;
     const txn = TheDb.transaction((meatball: Partial<Meatball>) => {
-      if (meatball.name) {
-        rowsChanged += updateNameStmt.run({ id: meatball.id, name: meatball.name }).changes;
-      }
-      if (meatball.description) {
-        rowsChanged += updateDescriptionStmt.run({ id: meatball.id, description: meatball.description }).changes
-      }
-      if (meatball.instructions) {
-        rowsChanged += updateInstructionsStmt.run({ id: meatball.id, instructions: meatball.instructions }).changes;
-      }
+      rowsChanged += updateStmt.run({
+        id: meatball.id,
+        name: meatball.name,
+        description: description,
+        instructions: instructions
+      }).changes;
     });
 
     txn(editedMeatball);
@@ -97,6 +86,15 @@ UPDATE meatballs
   static getMeatballById(id: string): Meatball | null {
     const selectStmt = TheDb.prepare(`SELECT * FROM meatballs WHERE id = @id;`);
     return selectStmt.get({ id: id }) as Meatball | null
+  }
+
+  static getMeatballInstructionsByThreadId(threadId: string): string | null {
+    const selectStmt = TheDb.prepare(`
+SELECT m.instructions
+  FROM meatballs m
+  JOIN chat_threads ct ON ct.meatball_id = m.id
+ WHERE ct.id = @threadId;`);
+    return selectStmt.get({ threadId: threadId }) as string | null
   }
 
   static getMeatballs(): Meatball[] | null {

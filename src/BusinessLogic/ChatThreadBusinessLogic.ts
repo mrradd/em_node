@@ -66,12 +66,12 @@ export class ChatThreadBusinessLogic {
   }
 
   static updateChatThread(dto: UpdateChatThreadRequestDTO): UpdateChatThreadResponseDTO {
-    const resp: Partial<ChatThread> = ChatThreadDBA.updateChatThread(dto);
+    const resp: Partial<ChatThread> | null = ChatThreadDBA.updateChatThread(dto);
 
     return {
-      id: resp.id,
-      name: resp.name,
-      meatballId: resp.meatball_id,
+      id: resp?.id,
+      name: resp?.name,
+      meatballId: resp?.meatball_id,
     } as UpdateChatThreadResponseDTO;
   }
 }

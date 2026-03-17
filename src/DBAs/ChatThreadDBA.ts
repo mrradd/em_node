@@ -39,40 +39,43 @@ VALUES (@id , @name, @created_timestamp);`);
   }
 
   static getAllChatThreads(): ChatThread[] {
-    const selectStmt = TheDb.prepare(`SELECT id, name, created_timestamp FROM chat_threads;`);
+    const selectStmt = TheDb.prepare(`SELECT id, meatball_id, name, created_timestamp FROM chat_threads;`);
     const res = selectStmt.all() as ChatThread[];
     return res;
   }
 
   static getChatThreadById(id: string): ChatThread {
     const selectStmt = TheDb.prepare(`
-SELECT id, name, created_timestamp
+SELECT id, meatball_id, name, created_timestamp
   FROM chat_threads
  WHERE id = @id;`);
 
     return selectStmt.get({ id: id }) as ChatThread;
   }
 
-  /** @returns an object only containing changed values. */
-  static updateChatThread({ id, newThreadName }: UpdateChatThreadRequestDTO): Partial<ChatThread> {
-    const updateNameStmt = TheDb.prepare(`
+  static updateChatThread({ id, newThreadName, newMeatballId }: UpdateChatThreadRequestDTO): Partial<ChatThread> | null {
+    const updateStmt = TheDb.prepare(`
 UPDATE chat_threads
-   SET name = @name
+   SET name = @name, meatball_id = @meatball_id
  WHERE id = @id;`);
 
     const editedThread: Partial<ChatThread> = {
       id: id,
       name: newThreadName,
+      meatball_id: newMeatballId ?? null,
     };
 
+    let rowsChanged: number = 0;
     const txn = TheDb.transaction((theThread: Partial<ChatThread>) => {
-      if (theThread.name) {
-        updateNameStmt.run({ id: theThread.id, name: theThread.name });
-      }
+      rowsChanged += updateStmt.run({
+        id: theThread.id,
+        name: theThread.name,
+        meatball_id: theThread.meatball_id
+      }).changes;
     });
 
     txn(editedThread);
 
-    return editedThread;
+    return rowsChanged > 0 ? editedThread : null;
   }
 }
