@@ -12,12 +12,13 @@ import { ChatDTO } from "../DTOs/Chat/ChatDTO";
 
 //TODO CH. RETURN NULLS FOR FAILURES.
 export class ChatThreadBusinessLogic {
-  static createNewChatThread({ threadName }: CreateChatThreadRequestDTO): ChatThreadDTO {
-    const resp: ChatThread = ChatThreadDBA.createChatThread(threadName);
+  static createNewChatThread({ threadName, modelName }: CreateChatThreadRequestDTO): ChatThreadDTO {
+    const resp: ChatThread = ChatThreadDBA.createChatThread(threadName, modelName);
 
     return {
       id: resp.id,
       name: resp.name,
+      modelName: resp.model_name,
       createdTimestamp: resp.created_timestamp,
     } as ChatThreadDTO
   }
@@ -32,6 +33,7 @@ export class ChatThreadBusinessLogic {
         id: chatThread.id,
         name: chatThread.name,
         createdTimestamp: chatThread.created_timestamp,
+        modelName: chatThread.model_name,
         meatballId: chatThread.meatball_id,
       } as ChatThreadDTO;
     });
@@ -61,6 +63,7 @@ export class ChatThreadBusinessLogic {
       name: thread?.name,
       createdTimestamp: thread?.created_timestamp,
       meatballId: thread?.meatball_id,
+      modelName: thread.model_name,
       chats: chatDtos,
     } as ChatThreadDetailDTO
   }
@@ -72,6 +75,7 @@ export class ChatThreadBusinessLogic {
       id: resp?.id,
       name: resp?.name,
       meatballId: resp?.meatball_id,
+      modelName: resp?.model_name,
     } as UpdateChatThreadResponseDTO;
   }
 }

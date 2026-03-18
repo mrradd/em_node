@@ -2,7 +2,6 @@ import { ExecutableMigration, generateChecksum } from "../models/ExecutableMigra
 
 const id = "202602280850_meatballs";
 
-//First, compile all the statements to use.
 const up = `
 CREATE TABLE IF NOT EXISTS meatballs (
   id TEXT PRIMARY KEY NOT NULL,
@@ -13,10 +12,12 @@ CREATE TABLE IF NOT EXISTS meatballs (
   edited_timestamp TEXT);
   
 ALTER TABLE chat_threads ADD COLUMN meatball_id TEXT REFERENCES meatballs(id);
+ALTER TABLE chat_threads ADD COLUMN model_name TEXT NOT NULL;
 `;
 
 const down = `
 ALTER TABLE chat_threads DROP COLUMN meatball_id;
+ALTER TABLE chat_threads DROP COLUMN model_name;
 DROP TABLE IF EXISTS meatballs;
 `;
 

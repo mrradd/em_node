@@ -88,13 +88,13 @@ UPDATE meatballs
     return selectStmt.get({ id: id }) as Meatball | null
   }
 
-  static getMeatballInstructionsByThreadId(threadId: string): string | null {
+  static getMeatballInstructionsByThreadId(threadId: string): Partial<Meatball> | null {
     const selectStmt = TheDb.prepare(`
 SELECT m.instructions
   FROM meatballs m
   JOIN chat_threads ct ON ct.meatball_id = m.id
  WHERE ct.id = @threadId;`);
-    return selectStmt.get({ threadId: threadId }) as string | null
+    return selectStmt.get({ threadId: threadId }) as Partial<Meatball>;
   }
 
   static getMeatballs(): Meatball[] | null {
