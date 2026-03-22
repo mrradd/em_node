@@ -64,7 +64,7 @@ UPDATE chat_threads
     const editedThread: Partial<ChatThread> = {
       id: id,
       name: newThreadName,
-      meatball_id: newMeatballId ?? null,
+      meatball_id: newMeatballId || null,
       model_name: modelName,
     };
 
