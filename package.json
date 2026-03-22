@@ -6,7 +6,8 @@
     "dev": "ts-node src/Server.ts",
     "build": "tsc",
     "start": "node dist/Server.js",
-    "init_db": "ts-node src/scripts/script_init_db_tables.ts"
+    "init_db": "ts-node src/scripts/script_init_db_tables.ts",
+    "migrate": "ts-node src/scripts/script_migrate.ts"
   },
   "dependencies": {
     "better-sqlite3": "12.5.0",

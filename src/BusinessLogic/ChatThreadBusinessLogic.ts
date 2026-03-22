@@ -1,26 +1,24 @@
 import { ChatThread } from "../models/ChatThread";
-import { ChatThreadDTO } from "../DTOs/ChatThreadDTO";
+import { ChatThreadDTO } from "../DTOs/ChatThread/ChatThreadDTO";
 import { ChatThreadDBA } from "../DBAs/ChatThreadDBA";
-import { CreateChatThreadRequestDTO } from "../DTOs/CreateChatThreadRequestDTO";
-import { UpdateChatThreadRequestDTO } from "../DTOs/UpdateChatThreadRequestDTO";
-import { UpdateChatThreadResponseDTO } from "../DTOs/UpdateChatThreadResponseDTO";
-import { GetAllChatThreadsResponseDTO } from "../DTOs/GetAllChatThreadsResponseDTO";
+import { CreateChatThreadRequestDTO } from "../DTOs/ChatThread/CreateChatThreadRequestDTO";
+import { UpdateChatThreadRequestDTO } from "../DTOs/ChatThread/UpdateChatThreadRequestDTO";
+import { UpdateChatThreadResponseDTO } from "../DTOs/ChatThread/UpdateChatThreadResponseDTO";
+import { GetAllChatThreadsResponseDTO } from "../DTOs/ChatThread/GetAllChatThreadsResponseDTO";
 import { ChatDBA } from "../DBAs/ChatDBA";
 import { Chat } from "../models/Chat";
-import { ChatThreadDetailDTO } from "../DTOs/ChatThreadDetailDTO";
-import { ChatDTO } from "../DTOs/ChatDTO";
+import { ChatThreadDetailDTO } from "../DTOs/ChatThread/ChatThreadDetailDTO";
+import { ChatDTO } from "../DTOs/Chat/ChatDTO";
 
+//TODO CH. RETURN NULLS FOR FAILURES.
 export class ChatThreadBusinessLogic {
-  static createNewChatThread({ threadName }: CreateChatThreadRequestDTO): ChatThreadDTO {
-    const resp: ChatThread | null = ChatThreadDBA.createChatThread(threadName);
-
-    if (!resp) {
-      throw new Error("createNewChatThread: An error occured creating the ChatThread");
-    }
+  static createNewChatThread({ threadName, modelName }: CreateChatThreadRequestDTO): ChatThreadDTO {
+    const resp: ChatThread = ChatThreadDBA.createChatThread(threadName, modelName);
 
     return {
       id: resp.id,
       name: resp.name,
+      modelName: resp.model_name,
       createdTimestamp: resp.created_timestamp,
     } as ChatThreadDTO
   }
@@ -35,6 +33,8 @@ export class ChatThreadBusinessLogic {
         id: chatThread.id,
         name: chatThread.name,
         createdTimestamp: chatThread.created_timestamp,
+        modelName: chatThread.model_name,
+        meatballId: chatThread.meatball_id,
       } as ChatThreadDTO;
     });
 
@@ -59,23 +59,23 @@ export class ChatThreadBusinessLogic {
     });
 
     return {
-      id: thread.id,
-      name: thread.name,
-      createdTimestamp: thread.created_timestamp,
+      id: thread?.id,
+      name: thread?.name,
+      createdTimestamp: thread?.created_timestamp,
+      meatballId: thread?.meatball_id,
+      modelName: thread.model_name,
       chats: chatDtos,
     } as ChatThreadDetailDTO
   }
 
   static updateChatThread(dto: UpdateChatThreadRequestDTO): UpdateChatThreadResponseDTO {
-    const resp: Partial<ChatThread> = ChatThreadDBA.updateChatThread(dto);
-
-    if (!resp) {
-      throw new Error("createNewChatThread: An error occured creating the ChatThread");
-    }
+    const resp: Partial<ChatThread> | null = ChatThreadDBA.updateChatThread(dto);
 
     return {
-      id: resp.id,
-      name: resp.name,
+      id: resp?.id,
+      name: resp?.name,
+      meatballId: resp?.meatball_id,
+      modelName: resp?.model_name,
     } as UpdateChatThreadResponseDTO;
   }
 }

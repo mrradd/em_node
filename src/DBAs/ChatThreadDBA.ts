@@ -1,17 +1,21 @@
-import { UpdateChatThreadRequestDTO } from "../DTOs/UpdateChatThreadRequestDTO";
+import { UpdateChatThreadRequestDTO } from "../DTOs/ChatThread/UpdateChatThreadRequestDTO";
 import { ChatThread } from "../models/ChatThread";
 import { TheDb } from "../Server";
+require("crypto");
+
+//TODO CH. RETURN NULL IN BAD CASE FOR CONSISTENCY.
 
 export class ChatThreadDBA {
-
-  static createChatThread(threadName: string): ChatThread | null {
+  static createChatThread(threadName: string, modelName: string): ChatThread {
     const insertStmt = TheDb.prepare(`
-INSERT INTO chat_threads (id, name, created_timestamp)
-VALUES (@id , @name, @created_timestamp);`);
+INSERT INTO chat_threads (id, name, model_name, created_timestamp)
+VALUES (@id , @name, @model_name, @created_timestamp);`);
 
     const newThread: ChatThread = {
       id: crypto.randomUUID(),
       name: threadName,
+      model_name: modelName,
+      meatball_id: "",
       created_timestamp: Date.now(),
     };
 
@@ -37,40 +41,45 @@ VALUES (@id , @name, @created_timestamp);`);
   }
 
   static getAllChatThreads(): ChatThread[] {
-    const selectStmt = TheDb.prepare(`SELECT id, name, created_timestamp FROM chat_threads;`);
-    const res = selectStmt.all()
+    const selectStmt = TheDb.prepare(`SELECT id, meatball_id, name, model_name, created_timestamp FROM chat_threads;`);
+    const res = selectStmt.all() as ChatThread[];
     return res;
   }
 
   static getChatThreadById(id: string): ChatThread {
     const selectStmt = TheDb.prepare(`
-SELECT id, name, created_timestamp
+SELECT id, meatball_id, model_name, name, created_timestamp
   FROM chat_threads
  WHERE id = @id;`);
 
-    return selectStmt.get({ id: id });
+    return selectStmt.get({ id: id }) as ChatThread;
   }
 
-  /** @returns an object only containing changed values. */
-  static updateChatThread({ id, newThreadName }: UpdateChatThreadRequestDTO): Partial<ChatThread> {
-    const updateNameStmt = TheDb.prepare(`
+  static updateChatThread({ id, newThreadName, newMeatballId, modelName }: UpdateChatThreadRequestDTO): Partial<ChatThread> | null {
+    const updateStmt = TheDb.prepare(`
 UPDATE chat_threads
-   SET name = @name
+   SET name = @name, meatball_id = @meatball_id, model_name = @model_name
  WHERE id = @id;`);
 
-    const newThread: Partial<ChatThread> = {
+    const editedThread: Partial<ChatThread> = {
       id: id,
       name: newThreadName,
+      meatball_id: newMeatballId ?? null,
+      model_name: modelName,
     };
 
-    const txn = TheDb.transaction((theThread: ChatThread) => {
-      if (theThread.name) {
-        updateNameStmt.run({ id: theThread.id, name: theThread.name });
-      }
+    let rowsChanged: number = 0;
+    const txn = TheDb.transaction((theThread: Partial<ChatThread>) => {
+      rowsChanged += updateStmt.run({
+        id: theThread.id,
+        name: theThread.name,
+        meatball_id: theThread.meatball_id,
+        model_name: theThread.model_name,
+      }).changes;
     });
 
-    txn(newThread);
+    txn(editedThread);
 
-    return newThread;
+    return rowsChanged > 0 ? editedThread : null;
   }
 }
