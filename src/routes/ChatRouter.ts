@@ -58,16 +58,6 @@ chatRouter.get("/model/list", async (req, res) => {
   res.json({
     data: {
       models: [
-        "gpt-5-chat-latest",
-        "gpt-5-codex",
-        "gpt-5-mini-2025-08-07",
-        "gpt-5-nano-2025-08-07",
-        "gpt-5.1-chat-latest",
-        "gpt-5.1-codex",
-        "gpt-5.1-codex-max",
-        "gpt-5.2-2025-12-11",
-        "gpt-5.2-chat-latest",
-        "gpt-5.2-codex",
         "gpt-5.3-chat-latest",
         "gpt-5.3-codex",
         "gpt-5.4-2026-03-05",
