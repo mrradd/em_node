@@ -64,6 +64,8 @@ chatRouter.get("/model/list", async (req, res) => {
         "gpt-5.4-mini-2026-03-17",
         "gpt-5.4-nano-2026-03-17",
         "gpt-5.4-pro-2026-03-05",
+        "gpt-5.5-2026-04-23",
+        "gpt-5.5-pro-2026-04-23",
       ]
     }
   })
