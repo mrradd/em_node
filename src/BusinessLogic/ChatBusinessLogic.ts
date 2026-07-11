@@ -8,6 +8,9 @@ import { MeatballDBA } from "../DBAs/MeatballDBA";
 import { ChatThreadDBA } from "../DBAs/ChatThreadDBA";
 import { ChatThread } from "../models/ChatThread";
 import { Meatball } from "../models/Meatball";
+import { Response } from "openai/internal/builtin-types";
+import { findAiCompany } from "../utils/AiModels";
+import { ANTHROPIC, OPEN_AI } from "../utils/RadConsts";
 
 export class ChatBusinessLogic {
   /**
@@ -47,8 +50,32 @@ ${assistantInstructions}
     //Add the new message to the end of the input list.
     inputs.push({ role: "user", content: message });
 
+    const companyName = findAiCompany(thread.model_name)
+
+    if(companyName === OPEN_AI) {
+      return await ChatBusinessLogic.openAiRequest(threadId, message, thread.model_name, inputs)
+    }
+    else if (companyName === ANTHROPIC) {
+      //todo ch  do claude stuff
+      console.log("derp")
+      return await ChatBusinessLogic.openAiRequest(threadId, message, thread.model_name, inputs)
+    }
+    else {
+      throw new Error(`No Company matched model ${thread?.model_name ?? "[no model]"}`);
+    }
+  }
+
+  /**
+   * 
+   * @param threadId 
+   * @param message 
+   * @param modelName 
+   * @param inputs 
+   * @returns 
+   */
+  static async openAiRequest(threadId: string, message: string, modelName: string, inputs: any): Promise<ChatResponseDTO> {
     const response = await openaiClient.responses.create({
-      model: thread.model_name,
+      model: modelName,
       input: inputs,
     });
 

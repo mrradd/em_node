@@ -4,6 +4,7 @@ import { ChatThreadBusinessLogic } from "../BusinessLogic/ChatThreadBusinessLogi
 import { ChatRequestDTO } from "../DTOs/Chat/ChatRequestDTO";
 import { CreateChatThreadRequestDTO } from "../DTOs/ChatThread/CreateChatThreadRequestDTO";
 import { UpdateChatThreadRequestDTO } from "../DTOs/ChatThread/UpdateChatThreadRequestDTO";
+import { aiModels } from "../utils/AiModels";
 
 export const chatRouter = Router();
 //TODO CH. HANDLE NULLS WITH A BAD RESPONSE.
@@ -57,14 +58,9 @@ chatRouter.patch("/thread/update", async (req, res) => {
 chatRouter.get("/model/list", async (req, res) => {
   res.json({
     data: {
-      models: [
-        "gpt-5.4-2026-03-05",
-        "gpt-5.4-mini-2026-03-17",
-        "gpt-5.4-nano-2026-03-17",
-        "gpt-5.4-pro-2026-03-05",
-        "gpt-5.5-2026-04-23",
-        "gpt-5.5-pro-2026-04-23",
-      ]
+      models: aiModels.map((model) => {
+        return model.name
+      })
     }
   })
 });

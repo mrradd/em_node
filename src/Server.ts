@@ -1,16 +1,20 @@
 import express from "express";
 import cors from "cors";
 import { chatRouter } from "./routes/ChatRouter";
-import { DATABASE_NAME, HOST, OPENAI_API_KEY, PORT, validateSettings } from "./EMConfig";
+import { ANTHROPIC_API_KEY, DATABASE_NAME, HOST, OPENAI_API_KEY, PORT, validateSettings } from "./EMConfig";
 import { meatballRouter } from "./routes/MeatballRouter";
 import OpenAI from "openai";
 import Database from "better-sqlite3";
+import Anthropic from "@anthropic-ai/sdk";
 
 validateSettings();
 
 export const TheDb = new Database(DATABASE_NAME);
 export const openaiClient = new OpenAI({
   apiKey: OPENAI_API_KEY
+});
+export const anthropicClient = new Anthropic({
+  apiKey: ANTHROPIC_API_KEY
 });
 
 const app = express();
