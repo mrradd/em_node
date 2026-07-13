@@ -12,6 +12,9 @@ export const aiModels = [
   { name: "gpt-5.4-pro-2026-03-05", company: OPEN_AI },
   { name: "gpt-5.5-2026-04-23", company: OPEN_AI },
   { name: "gpt-5.5-pro-2026-04-23", company: OPEN_AI },
+  { name: "gpt-5.6-sol", company: OPEN_AI },
+  { name: "gpt-5.6-terra", company: OPEN_AI },
+  { name: "gpt-5.6-luna", company: OPEN_AI },
   { name: "claude-haiku-4-5", company: ANTHROPIC },
   { name: "claude-sonnet-5", company: ANTHROPIC },
   { name: "claude-opus-4-8", company: ANTHROPIC },
@@ -29,7 +32,7 @@ export const findAiCompany = (modelName: string): string => {
     return model.name === modelName;
   })
 
-  if(!model) {
+  if (!model) {
     throw new Error("No valid model found.");
   }
 

@@ -3,14 +3,15 @@ import { ChatRequestDTO } from "../DTOs/Chat/ChatRequestDTO";
 import { ChatDBA } from "../DBAs/ChatDBA";
 import { LlmDataDBA } from "../DBAs/LlmDataDBA";
 import { ChatResponseDTO } from "../DTOs/Chat/ChatResponseDTO";
-import { openaiClient } from "../Server";
+import { anthropicClient, openaiClient } from "../Server";
 import { MeatballDBA } from "../DBAs/MeatballDBA";
 import { ChatThreadDBA } from "../DBAs/ChatThreadDBA";
 import { ChatThread } from "../models/ChatThread";
 import { Meatball } from "../models/Meatball";
-import { Response } from "openai/internal/builtin-types";
 import { findAiCompany } from "../utils/AiModels";
 import { ANTHROPIC, OPEN_AI } from "../utils/RadConsts";
+import { AiData, anthropicMessageToAiData, openAiResponseToAiData } from "../utils/AiData";
+import { Message } from "@anthropic-ai/sdk/resources.js";
 
 export class ChatBusinessLogic {
   /**
@@ -52,32 +53,29 @@ ${assistantInstructions}
 
     const companyName = findAiCompany(thread.model_name)
 
-    if(companyName === OPEN_AI) {
-      return await ChatBusinessLogic.openAiRequest(threadId, message, thread.model_name, inputs)
+    let aiData: AiData | null = null;
+    if (companyName === OPEN_AI) {
+      const response = await openaiClient.responses.create({
+        model: thread.model_name,
+        input: inputs,
+      });
+
+      aiData = openAiResponseToAiData(response);
     }
     else if (companyName === ANTHROPIC) {
       //todo ch  do claude stuff
       console.log("derp")
-      return await ChatBusinessLogic.openAiRequest(threadId, message, thread.model_name, inputs)
+      const message: Message = await anthropicClient.messages.create({
+        max_tokens: 4096,
+        messages: inputs,
+        model: thread.model_name,
+      });
+
+      aiData = anthropicMessageToAiData(message);
     }
     else {
       throw new Error(`No Company matched model ${thread?.model_name ?? "[no model]"}`);
     }
-  }
-
-  /**
-   * 
-   * @param threadId 
-   * @param message 
-   * @param modelName 
-   * @param inputs 
-   * @returns 
-   */
-  static async openAiRequest(threadId: string, message: string, modelName: string, inputs: any): Promise<ChatResponseDTO> {
-    const response = await openaiClient.responses.create({
-      model: modelName,
-      input: inputs,
-    });
 
     const newChat = {
       thread_id: threadId,
@@ -109,5 +107,22 @@ ${assistantInstructions}
       createdTimestamp: resultResponse.created_timestamp,
       role: resultResponse.role,
     } as ChatResponseDTO;
+  }
+
+  /**
+   * Sends an api request using OpenAI's Response API.
+   * @param threadId - `string` - uuid for the Thread the message will belong to.
+   * @param message - `string` - Content to send in the request.
+   * @param modelName - `string` - LLM to use.
+   * @param inputs - `any` - Past messages for the chat session.
+   * @returns 
+   */
+  static async openAiRequest(threadId: string, message: string, modelName: string, inputs: any): Promise<ChatResponseDTO> {
+    const response = await openaiClient.responses.create({
+      model: modelName,
+      input: inputs,
+    });
+
+
   }
 }
