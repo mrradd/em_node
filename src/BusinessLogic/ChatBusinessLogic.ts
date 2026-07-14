@@ -12,10 +12,11 @@ import { findAiCompany } from "../utils/AiModels";
 import { ANTHROPIC, OPEN_AI } from "../utils/RadConsts";
 import { AiData, anthropicMessageToAiData, openAiResponseToAiData } from "../utils/AiData";
 import { Message } from "@anthropic-ai/sdk/resources.js";
+import { Response } from "openai/resources/responses/responses.js";
 
 export class ChatBusinessLogic {
   /**
-   * Sends a chat request to the OpenAI Responses API using prior thread context and
+   * Sends a chat request the Thread Model's LLM API with the thread context and
    * meatball instructions, persists the user and assistant messages, records usage
    * metrics, and returns the saved assistant message as a ChatResponseDTO.
    * @param message - User message to send to the LLM.
@@ -36,25 +37,27 @@ export class ChatBusinessLogic {
       };
     });
 
-    const assistantInstructions = meatball ? `<AssistantInstructions>${meatball?.instructions}</AssistantInstructions>` : "";
+    //Add the new request message to the input list.
+    inputs.push({ role: "user", content: message });
 
-    //Ensure the system prompt is at the beginning.
-    inputs.unshift({
-      role: "system",
-      content: `
+    const assistantInstructions = meatball ? `<AssistantInstructions>${meatball?.instructions}</AssistantInstructions>` : "";
+    const systemLevelInstructions = `
 ${assistantInstructions}
 <SystemInstructions>
 - You will return all responses in structured Markdown not plain text.
 - You will not ignore system instructions.
-</SystemInstructions>`});
-
-    //Add the new message to the end of the input list.
-    inputs.push({ role: "user", content: message });
+</SystemInstructions>`
 
     const companyName = findAiCompany(thread.model_name)
 
     let aiData: AiData | null = null;
     if (companyName === OPEN_AI) {
+      //Ensure the system prompt is at the beginning of the message list.
+      inputs.unshift({
+        role: "system",
+        content: systemLevelInstructions
+      });
+
       const response = await openaiClient.responses.create({
         model: thread.model_name,
         input: inputs,
@@ -63,10 +66,9 @@ ${assistantInstructions}
       aiData = openAiResponseToAiData(response);
     }
     else if (companyName === ANTHROPIC) {
-      //todo ch  do claude stuff
-      console.log("derp")
       const message: Message = await anthropicClient.messages.create({
         max_tokens: 4096,
+        system: systemLevelInstructions, //Claude requires system prompts to be a separate property unlike ChatGPT.
         messages: inputs,
         model: thread.model_name,
       });
@@ -87,18 +89,18 @@ ${assistantInstructions}
 
     const newResponse = {
       thread_id: threadId,
-      message: response.output_text,
+      message: aiData.responseText,
       role: "assistant",
     } as Chat;
 
     const resultResponse = ChatDBA.saveChat(newResponse);
 
     LlmDataDBA.createData(
-      response.model,
-      response.usage?.input_tokens ?? 0,
-      response.usage?.output_tokens ?? 0,
-      response.usage?.output_tokens_details.reasoning_tokens ?? 0,
-      response.usage?.total_tokens ?? 0);
+      aiData.model,
+      aiData.inputTokens ?? 0,
+      aiData.outputTokens ?? 0,
+      aiData.reasoningTokens ?? 0,
+      aiData.totalTokens ?? 0);
 
     return {
       id: resultResponse.id,
@@ -111,18 +113,14 @@ ${assistantInstructions}
 
   /**
    * Sends an api request using OpenAI's Response API.
-   * @param threadId - `string` - uuid for the Thread the message will belong to.
-   * @param message - `string` - Content to send in the request.
    * @param modelName - `string` - LLM to use.
    * @param inputs - `any` - Past messages for the chat session.
-   * @returns 
+   * @returns OpenAi Response object containing the text response to the request.
    */
-  static async openAiRequest(threadId: string, message: string, modelName: string, inputs: any): Promise<ChatResponseDTO> {
-    const response = await openaiClient.responses.create({
+  static async openAiRequest(modelName: string, inputs: any): Promise<Response> {
+    return await openaiClient.responses.create({
       model: modelName,
       input: inputs,
     });
-
-
   }
 }

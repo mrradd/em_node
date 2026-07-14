@@ -26,9 +26,10 @@ export const anthropicMessageToAiData = (message: Message): AiData => {
   const outTokens = message.usage.output_tokens ?? 0;
   const reasonTokens = message.usage.output_tokens_details?.thinking_tokens ?? 0;
   const sumTokens = inTokens + outTokens + reasonTokens;
-  console.log(message.content)//todo ch. delete
+
   let text = "";
   for (const block of message.content) {
+    console.log(block)//todo ch. delete
     if (block.type === "text") {
       text = block.text;
     }
