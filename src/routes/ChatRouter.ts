@@ -4,7 +4,7 @@ import { ChatThreadBusinessLogic } from "../BusinessLogic/ChatThreadBusinessLogi
 import { ChatRequestDTO } from "../DTOs/Chat/ChatRequestDTO";
 import { CreateChatThreadRequestDTO } from "../DTOs/ChatThread/CreateChatThreadRequestDTO";
 import { UpdateChatThreadRequestDTO } from "../DTOs/ChatThread/UpdateChatThreadRequestDTO";
-import { aiModels } from "../utils/AiModels";
+import { aiModels } from "../Ai/AiModels";
 
 export const chatRouter = Router();
 //TODO CH. HANDLE NULLS WITH A BAD RESPONSE.

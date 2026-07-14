@@ -1,5 +1,6 @@
 DATABASE_NAME=em.db
 HOST=localhost
-PORT=3000
+PORT=defaults_to_3000
 OPENAI_API_KEY=your-openai-api-key
 ANTHROPIC_API_KEY=your-anthropic-api-key
+ANTHROPIC_DEFAULT_MAX_RESPONSE_TOKENS=defaults_to_4096

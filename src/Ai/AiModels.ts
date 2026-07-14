@@ -1,4 +1,5 @@
-import { ANTHROPIC, OPEN_AI } from "./RadConsts";
+import { ANTHROPIC, OPEN_AI } from "../utils/RadConsts";
+
 
 export interface AiModel {
   name: string,
