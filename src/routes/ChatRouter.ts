@@ -8,6 +8,7 @@ import { aiModels } from "../Ai/AiModels";
 
 export const chatRouter = Router();
 //TODO CH. HANDLE NULLS WITH A BAD RESPONSE.
+//TODO ch. RETURN BETTER ERROR MESSAGES.
 
 //POST
 //api/v1/chat/send
