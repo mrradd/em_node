@@ -6,4 +6,5 @@ export interface ChatParams {
   inputs: EasyInputMessage[] | MessageParam[],
   systemLevelInstructions?: string,
   maxOutputTokens?: number,
+  reasoning: string, //none, low, medium, high, xhigh, max
 }

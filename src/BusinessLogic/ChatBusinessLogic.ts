@@ -10,6 +10,7 @@ import { Meatball } from "../models/Meatball";
 import { AiData } from "../Ai/AiData";
 import { AiProvider, aiProviderFactory } from "../Ai/AiProvider";
 import { ChatParams } from "../Ai/ChatParams";
+import { DEFAULT_REASONING_MODE } from "../EMConfig";
 
 export class ChatBusinessLogic {
   /**
@@ -41,17 +42,19 @@ export class ChatBusinessLogic {
     const systemLevelInstructions = `
 ${assistantInstructions}
 <SystemInstructions>
-- You will return all responses in structured Markdown not plain text.
-- You will not ignore system instructions.
+- Format every response as clear, well-structured Markdown. Use headings, lists, tables, or code blocks when they improve readability.
+- Follow all applicable instructions. If instructions conflict, follow the higher-priority instruction.
 </SystemInstructions>`
 
     let aiData: AiData | null = null;
     let aiProvider: AiProvider = aiProviderFactory(thread.model_name);
     const chatParams: ChatParams = {
-        inputs: inputs,
-        model: thread.model_name,
-        systemLevelInstructions: systemLevelInstructions,
-      }
+      inputs: inputs,
+      model: thread.model_name,
+      systemLevelInstructions: systemLevelInstructions,
+      reasoning: DEFAULT_REASONING_MODE
+    }
+    
     aiData = await aiProvider.chat(chatParams)
 
     const newChat = {

@@ -7,6 +7,7 @@ export const DATABASE_NAME: string = process.env.DATABASE_NAME ?? "";
 export const HOST: string = process.env.HOST ?? "localhost";
 export const PORT: number = Number(process.env.PORT) ?? 3000;
 export const ANTHROPIC_DEFAULT_MAX_RESPONSE_TOKENS = Number(process.env.ANTHROPIC_DEFAULT_MAX_RESPONSE_TOKENS) ?? 4096
+export const DEFAULT_REASONING_MODE = process.env.DEFAULT_REASONING_MODE ?? ""
 
 export function validateSettings() {
   console.log(`DATABASE_NAME:\t${DATABASE_NAME}`);
@@ -15,6 +16,7 @@ export function validateSettings() {
   console.log(`OPENAI_API_KEY:\t${OPENAI_API_KEY ? 'Is set.' : 'Is not set.'}`);
   console.log(`ANTHROPIC_API_KEY:\t${ANTHROPIC_API_KEY ? 'Is set.' : 'Is not set.'}`);
   console.log(`ANTHROPIC_DEFAULT_MAX_RESPONSE_TOKENS:\t${ANTHROPIC_DEFAULT_MAX_RESPONSE_TOKENS}`);
+  console.log(`DEFAULT_REASONING_MODE:\t${DEFAULT_REASONING_MODE}`);
 
   let missingNeededVals = false;
 
@@ -25,6 +27,11 @@ export function validateSettings() {
 
   if (!OPENAI_API_KEY && !ANTHROPIC_API_KEY) {
     console.error("!!! MISSING AI API keys !!!");
+    missingNeededVals = true;
+  }
+
+  if (!DEFAULT_REASONING_MODE) {
+    console.error("!!! MISSING DEFAULT_REASONING_MODE !!!");
     missingNeededVals = true;
   }
 

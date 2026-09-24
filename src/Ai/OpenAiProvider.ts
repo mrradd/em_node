@@ -3,6 +3,8 @@ import { openaiClient } from "../Server";
 import { AiData, openAiResponseToAiData } from "./AiData";
 import { AiProvider } from "./AiProvider";
 import { ChatParams } from "./ChatParams";
+import { ReasoningEffort } from "openai/resources.js";
+import { DEFAULT_REASONING_MODE } from "../EMConfig";
 
 export class OpenAiProvider implements AiProvider {
   /**
@@ -16,8 +18,30 @@ export class OpenAiProvider implements AiProvider {
       input: chatParams.inputs as ResponseInput,
       instructions: chatParams.systemLevelInstructions,
       max_output_tokens: chatParams.maxOutputTokens,
+      reasoning: { effort: OpenAiProvider.convertDefaultReasoningStrToReasoningEffort(chatParams.reasoning!) },
     });
 
     return openAiResponseToAiData(response);
+  }
+
+  static convertDefaultReasoningStrToReasoningEffort(reasongingStr: string): ReasoningEffort {
+    let effort: ReasoningEffort = "none"
+    
+    switch(reasongingStr){
+      case "none": effort = "none"
+        break;
+      case "low": effort = "low"
+        break;
+      case "medium": effort = "medium"
+        break;
+      case "high": effort = "high"
+        break;
+      case "xhigh": effort = "xhigh"
+        break;
+      case "max": effort = "max"
+        break;
+    }
+
+    return effort
   }
 }
